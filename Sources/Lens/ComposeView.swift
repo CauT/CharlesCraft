@@ -49,7 +49,7 @@ struct LensComposeView: View {
     @State private var loadID = UUID()
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Compose request").font(.title2.weight(.semibold))
+            CraftPanelHeading(title: "Compose request", subtitle: "Build a request and inspect its result.", icon: "square.and.pencil")
             if let source = target.source {
                 Text("Source flow \(source.id)").font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
                 if draft != nil { Button("Reload source (discard edits)", action: loadSource).font(.caption).disabled(loading) }
@@ -75,7 +75,7 @@ struct LensComposeView: View {
                 Button(sending ? "Queueing…" : "Queue request") { submit() }
                     .buttonStyle(.borderedProminent).disabled(draft == nil || loading || !store.isRunning)
             }
-        }.padding(20).frame(minWidth: 760, minHeight: 580).disabled(sending || readingFile).interactiveDismissDisabled(sending || readingFile)
+        }.padding(20).frame(minWidth: 760, minHeight: 580).craftSheet().disabled(sending || readingFile).interactiveDismissDisabled(sending || readingFile)
         .task(id: target.id) { loadSource() }
         .onDisappear { loadID = UUID() }
     }

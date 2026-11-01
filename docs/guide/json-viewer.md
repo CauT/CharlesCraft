@@ -1,4 +1,4 @@
-# Reading JSON in Lens
+# Reading JSON in CharlesCraft
 
 Choose **JSON** in a Request or Response body. Valid UTF-8 JSON opens in **Tree**:
 expand objects/arrays, select a field, and inspect its value without scanning one
@@ -39,7 +39,7 @@ application-memory guarantee.
 
 Reviewed official documentation on 2026-10-23:
 
-| Reference | Relevant observation | Lens decision |
+| Reference | Relevant observation | CharlesCraft decision |
 | --- | --- | --- |
 | [Firefox Network response details](https://firefox-source-docs.mozilla.org/devtools-user/network_monitor/request_details/index.html) | Structured JSON and raw response inspection serve different tasks | Keep tree navigation and original source side by side as selectable modes |
 | [Postman response tools](https://learning.postman.com/latest-v-12/docs/use/send-requests/response-data/responses) | Body inspection exposes format selection, search and raw data tools | Make reading/search/copy controls visible inside both message sides |

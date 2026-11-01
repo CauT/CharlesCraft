@@ -111,8 +111,7 @@ private struct LensWebSocketMessageCard: View {
                 LensBodyTextView(text: rendered.isEmpty ? "[Empty message]" : rendered, title: "WebSocket message")
                     .frame(height: 180)
             } else { ProgressView("Formatting…").controlSize(.small) }
-        }.padding(10).frame(maxWidth: .infinity, alignment: .leading)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 6))
+        }.frame(maxWidth: .infinity, alignment: .leading).craftCard()
         .onAppear { hex = message.preferredHex }
         .onChange(of: message.index) { hex = message.preferredHex }
         .task(id: input) {

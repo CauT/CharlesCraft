@@ -21,7 +21,7 @@ struct LensTCPStreamsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("TCP forwarding & streams").font(.title2.weight(.semibold))
+                CraftPanelHeading(title: "TCP streams", subtitle: "Forward connections and inspect their bytes.", icon: "arrow.left.arrow.right")
                 Spacer()
                 Button("Done") { dismiss() }.keyboardShortcut(.defaultAction)
             }
@@ -53,7 +53,7 @@ struct LensTCPStreamsView: View {
                     Spacer()
                     Button("Save forwarding settings") {
                         store.tcpForwards = forwards
-                        store.applyRules { success in message = success ? "Saved. Start Lens to listen on these ports." : "Could not save settings." }
+                        store.applyRules { success in message = success ? "Saved. Start CharlesCraft to listen on these ports." : "Could not save settings." }
                     }.disabled(issue != nil || store.settingsSaving)
                 }
                 }.disabled(locked)
@@ -97,7 +97,7 @@ struct LensTCPStreamsView: View {
             }.frame(minHeight: 150)
             Text(message).font(.caption).foregroundStyle(.secondary)
             Text("Recording is selected when a connection starts. 4 MiB / 1024 chunks per stream; 32 MiB total including chunk accounting. HTTP HAR files do not contain these raw streams.").font(.caption).foregroundStyle(.secondary)
-        }.padding(22).frame(width: 940, height: 780)
+        }.padding(22).frame(width: 940, height: 780).craftSheet()
         .onAppear { forwards = store.tcpForwards }
         .onChange(of: selection) { offset = 0; refresh() }
         .onChange(of: store.tcpGeneration) {

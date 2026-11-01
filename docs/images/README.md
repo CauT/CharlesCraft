@@ -1,4 +1,16 @@
-# Screenshot provenance
+# Image provenance
+
+- `charlescraft-icon.png`: original CharlesCraft 0.3.0 geometric icon, rendered
+  from `scripts/make-icon.swift` on 2026-11-01. It contains no reference-product
+  artwork.
+
+- `charlescraft-workspace.png`: actual CharlesCraft 0.3.0/build 10 workspace,
+  captured on 2026-11-01 with a synthetic localhost JSON POST and gzip response.
+- `charlescraft-setup.png`: actual connection chooser from that same candidate.
+  Neither screenshot establishes ordinary Mac routing or physical-device trust.
+  The existing host proxy and certificate trust were unchanged.
+
+## Historical Lens screenshots
 
 - `lens-icon.png`: original Lens application icon, from this project's icon generator.
 - `setup-guide-english.jpg`: real Lens 0.2.4/build 7 native Get Started window.

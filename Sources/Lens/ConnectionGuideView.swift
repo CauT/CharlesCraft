@@ -43,7 +43,7 @@ struct LensConnectionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Get Started with Lens").font(.title2.weight(.semibold))
+            CraftPanelHeading(title: "Connect your first device", subtitle: "Choose a route. Verify each step. Start inspecting.", icon: "cable.connector")
             Picker("Connection page", selection: $page) {
                 ForEach(LensConnectionPage.allCases, id: \.self) { Text($0.rawValue).tag($0) }
             }.pickerStyle(.segmented).labelsHidden()
@@ -68,7 +68,7 @@ struct LensConnectionView: View {
                 }
             }
         }
-        .padding(22).frame(width: 740, height: 680)
+        .padding(22).frame(width: 740, height: 680).craftSheet()
         .sheet(isPresented: $showClientCertificates) { LensClientCertificatesView(store: store) }
         .onAppear {
             port = store.port; sslHosts = store.sslHosts
@@ -90,7 +90,7 @@ struct LensConnectionView: View {
         Section("Choose a device to inspect") {
             destination("Android phone / tablet", detail: "Enable LAN access → Set the Wi-Fi proxy → Install the CA → Inspect requests", icon: "smartphone", page: .android)
             destination("iPhone / iPad", detail: "Set the Wi-Fi proxy → Install the profile → Enable full certificate trust", icon: "ipad.and.iphone", page: .ios)
-            destination("This Mac", detail: "Review existing proxies, then choose whether to route Mac traffic through Lens", icon: "desktopcomputer", page: .system)
+            destination("This Mac", detail: "Review existing proxies, then choose whether to route Mac traffic through CharlesCraft", icon: "desktopcomputer", page: .system)
         }
         Section("Your first capture in four steps") {
             Text("1. Start the proxy. 2. Connect your device. 3. Set up HTTPS trust. 4. Select a request and inspect Request and Response.")
@@ -150,10 +150,10 @@ struct LensConnectionView: View {
                 }
                 Button("Stop Capture to Change Settings", action: deviceSetup.stop).disabled(deviceSetup.busy)
             } else if store.isRunning {
-                Text("Lens is listening on loopback only, so devices cannot connect. Choose Stop and Set Up Device Proxy below, then save and start.")
+                Text("CharlesCraft is listening on loopback only, so devices cannot connect. Choose Stop and Set Up Device Proxy below, then save and start.")
                     .foregroundStyle(.orange)
             } else {
-                Text("Choose the Mac LAN address and port, then choose Save and Start Device Proxy below. Enable LAN access again each time you open Lens.")
+                Text("Choose the Mac LAN address and port, then choose Save and Start Device Proxy below. Enable LAN access again each time you open CharlesCraft.")
             }
             Group {
             Toggle("Enable LAN proxy for this launch", isOn: $lanEnabled)
@@ -178,7 +178,7 @@ struct LensConnectionView: View {
         Section("3 · Install the Android HTTPS certificate") {
             TextField("SSL hosts, comma-separated; * for all", text: $sslHosts)
                 .accessibilityLabel("Android HTTPS hosts to decrypt")
-            Text("On the device test page, choose Download Lens CA. In Android Settings, find Install a certificate / CA certificate and install the file. Menus vary by device; the certificate may be named mitmproxy. Check the fingerprint below before installing.")
+            Text("On the device test page, choose Download CharlesCraft CA. In Android Settings, find Install a certificate / CA certificate and install the file. Menus vary by device; the certificate may be named mitmproxy. Check the fingerprint below before installing.")
                 .font(.caption).textSelection(.enabled)
             certificateIdentity
             Text("The target browser or app must trust this CA. Modern Android apps may require a debug Network Security Configuration; installing a user CA alone does not make every app trust it. Certificate-pinned apps may reject inspection.").font(.caption).foregroundStyle(.secondary)
@@ -192,7 +192,7 @@ struct LensConnectionView: View {
         deviceProxySection
         Section("3 · Install and trust the iPhone / iPad HTTPS certificate") {
             TextField("SSL hosts, comma-separated; * for all", text: $sslHosts)
-            Text("Open the device test page in Safari and download Lens CA. Install the profile in Settings → General → VPN & Device Management. Then enable full trust for the root in General → About → Certificate Trust Settings. Installing the profile alone is not enough.")
+            Text("Open the device test page in Safari and download CharlesCraft CA. Install the profile in Settings → General → VPN & Device Management. Then enable full trust for the root in General → About → Certificate Trust Settings. Installing the profile alone is not enough.")
                 .font(.caption).textSelection(.enabled)
             certificateIdentity
             Link("Apple: Enable SSL trust for a manually installed certificate", destination: URL(string: "https://support.apple.com/en-us/102390")!).font(.caption)
@@ -214,7 +214,7 @@ struct LensConnectionView: View {
                 .font(.caption).foregroundStyle(.secondary)
             Text("Open in the device browser: http://lens.invalid/").font(.callout.monospaced()).textSelection(.enabled)
             Button("Copy Device Test URL") { lensCopy("http://lens.invalid/") }
-            Label(guideProgress.httpCount > 0 ? "\(guideProgress.httpCount) new LAN HTTP requests received during this setup" : "Waiting for device requests. The test page should say Connected to Lens.", systemImage: guideProgress.httpCount > 0 ? "checkmark.circle.fill" : "circle")
+            Label(guideProgress.httpCount > 0 ? "\(guideProgress.httpCount) new LAN HTTP requests received during this setup" : "Waiting for device requests. The test page should say Connected to CharlesCraft.", systemImage: guideProgress.httpCount > 0 ? "checkmark.circle.fill" : "circle")
                 .font(.caption).foregroundStyle(guideProgress.httpCount > 0 ? Color.green : Color.secondary)
         }
     }
@@ -223,7 +223,7 @@ struct LensConnectionView: View {
         Section("4 · Verify decrypted HTTPS and inspect Request / Response") {
             Label(guideProgress.httpsCount > 0 ? "\(guideProgress.httpsCount) decrypted HTTPS responses received during this setup" : "Waiting for decrypted HTTPS traffic. The Mac cannot directly confirm whether the device has installed the CA.", systemImage: guideProgress.httpsCount > 0 ? "checkmark.circle.fill" : "circle")
                 .font(.caption).foregroundStyle(guideProgress.httpsCount > 0 ? Color.green : Color.secondary)
-            Text("Open an HTTPS page or target app on your device. In Lens, select the request and open Request and Response to inspect headers and bodies. A CONNECT tunnel alone does not prove HTTPS decryption.")
+            Text("Open an HTTPS page or target app on your device. In CharlesCraft, select the request and open Request and Response to inspect headers and bodies. A CONNECT tunnel alone does not prove HTTPS decryption.")
                 .font(.caption)
             if let latest = guideProgress.latest {
                 Button("Open Latest Request") {
@@ -232,7 +232,7 @@ struct LensConnectionView: View {
                 }
             }
             DisclosureGroup("Still no traffic? Troubleshoot by symptom") {
-                Text("No HTTP: Check that the LAN proxy is ready, the device proxy address and port are correct, and both devices share a network. Guest Wi-Fi or AP isolation may block access. If the Mac firewall asks about incoming connections, allow Lens.")
+                Text("No HTTP: Check that the LAN proxy is ready, the device proxy address and port are correct, and both devices share a network. Guest Wi-Fi or AP isolation may block access. If the Mac firewall asks about incoming connections, allow CharlesCraft.")
                 Text("HTTP works but HTTPS fails: Check the CA fingerprint, certificate trust and whether SSL hosts includes the target. Some Android apps do not trust user CAs; certificate-pinned apps may reject inspection.")
                 Text("Still an empty list: Check that recording is active and switch from an old session to the recording session. When finished, set the device Wi-Fi proxy back to None / Off.")
             }.font(.caption).foregroundStyle(.secondary)
@@ -240,7 +240,7 @@ struct LensConnectionView: View {
     }
 
     @ViewBuilder private var certificateIdentity: some View {
-        Text(store.caSHA256.isEmpty ? "Start Lens to display the CA SHA-256 fingerprint." : "CA SHA-256: " + store.caSHA256)
+        Text(store.caSHA256.isEmpty ? "Start CharlesCraft to display the CA SHA-256 fingerprint." : "CA SHA-256: " + store.caSHA256)
             .font(.system(.caption, design: .monospaced)).textSelection(.enabled)
         Text("The generated certificate can be named mitmproxy. Compare the downloaded CA's SHA-256 fingerprint before trusting it.").font(.caption).foregroundStyle(.secondary)
     }
@@ -253,17 +253,17 @@ struct LensConnectionView: View {
                 TextField("Port", text: $port).frame(width: 100).disabled(store.isRunning || store.isStarting)
                     .accessibilityLabel("Main HTTP proxy port")
             }
-            Text("Configure both HTTP and HTTPS in your client to use this loopback address and port. Stop Lens before changing the port.").font(.caption).foregroundStyle(.secondary)
+            Text("Configure both HTTP and HTTPS in your client to use this loopback address and port. Stop CharlesCraft before changing the port.").font(.caption).foregroundStyle(.secondary)
             if let issue = configurationIssue { Label(issue, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange) }
         }
         Section("HTTPS inspection") {
             TextField("SSL hosts, comma-separated; * for all", text: $sslHosts)
-            Text("Host globs to decrypt. Start Lens once to generate your local CA certificate.").font(.caption).foregroundStyle(.secondary)
+            Text("Host globs to decrypt. Start CharlesCraft once to generate your local CA certificate.").font(.caption).foregroundStyle(.secondary)
             HStack {
                 Button("Reveal CA certificate", action: store.revealCertificate).disabled(store.caCert.isEmpty)
                 Button("Open certificate…") { NSWorkspace.shared.open(URL(fileURLWithPath: store.caCert)) }.disabled(store.caCert.isEmpty)
             }
-            Text("Import and review trust settings in Keychain Access yourself. Lens does not change certificate trust.").font(.caption).foregroundStyle(.secondary)
+            Text("Import and review trust settings in Keychain Access yourself. CharlesCraft does not change certificate trust.").font(.caption).foregroundStyle(.secondary)
         }
         Section("TLS client certificates") {
             HStack {
@@ -278,14 +278,14 @@ struct LensConnectionView: View {
         Section("Test a client") {
             Text(curlExample).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
             HStack { Button("Copy cURL command") { lensCopy(curlExample) }; Spacer(); Button("Open Network settings") { openNetworkSettings() } }
-            Text("Manual system setup: Network → your connection → Details → Proxies. Enable HTTP and HTTPS, set both to 127.0.0.1 and this port, then turn them off when Lens stops.").font(.caption).foregroundStyle(.secondary)
+            Text("Manual system setup: Network → your connection → Details → Proxies. Enable HTTP and HTTPS, set both to 127.0.0.1 and this port, then turn them off when CharlesCraft stops.").font(.caption).foregroundStyle(.secondary)
             Text("Capture limits: 2,000 requests / 256 MiB retained; 32 MiB per body; 2 MiB preview.").font(.caption).foregroundStyle(.secondary)
         }
     }
 
     @ViewBuilder private var systemSections: some View {
         Section("This Mac · Start with your browser") {
-            Text("1. Start the local proxy. 2. Review the existing proxy and network service below, then choose Use Lens for this service. 3. Set up HTTPS certificate trust. 4. Browse normally, select a request and inspect Request / Response.")
+            Text("1. Start the local proxy. 2. Review the existing proxy and network service below, then choose Use CharlesCraft for this service. 3. Set up HTTPS certificate trust. 4. Browse normally, select a request and inspect Request / Response.")
                 .font(.caption)
             if !store.isRunning && !store.isStarting { Button("Start Local Proxy", action: store.start) }
             Button("Review HTTPS Certificate Setup") { page = .client }
@@ -323,22 +323,22 @@ struct LensConnectionView: View {
             }
         }
         Section("Use the local capture proxy") {
-            Text("For HTTPS content, first open Client connection, review the Lens CA and configure trust in Keychain Access, then choose SSL hosts. Without trusted certificates, inspected HTTPS connections may fail. Lens never changes trust automatically.")
+            Text("For HTTPS content, first open Client connection, review the CharlesCraft CA and configure trust in Keychain Access, then choose SSL hosts. Without trusted certificates, inspected HTTPS connections may fail. CharlesCraft never changes trust automatically.")
                 .font(.caption).foregroundStyle(.secondary)
-            Toggle("Reconnect this service when Lens opens", isOn: Binding(get: { systemProxy.rememberOnLaunch }, set: { systemProxy.setRememberOnLaunch($0) }))
+            Toggle("Reconnect this service when CharlesCraft opens", isOn: Binding(get: { systemProxy.rememberOnLaunch }, set: { systemProxy.setRememberOnLaunch($0) }))
                 .disabled(systemProxy.isBusy)
-            Text("Saved after successful setup. Reconnection waits for Lens to listen and refuses changed network locations or previous proxy settings.").font(.caption).foregroundStyle(.secondary)
+            Text("Saved after successful setup. Reconnection waits for CharlesCraft to listen and refuses changed network locations or previous proxy settings.").font(.caption).foregroundStyle(.secondary)
             if let current = systemProxy.snapshot, current.http.enabled || current.https.enabled {
-                Text("Existing proxy: HTTP \(current.http.summary); HTTPS \(current.https.summary). Applying Lens replaces these routes for this service. If apps require an existing HTTP proxy, configure and verify Lens's HTTP upstream proxy first. Settings are not copied automatically. Stop/Quit restores the saved settings.")
+                Text("Existing proxy: HTTP \(current.http.summary); HTTPS \(current.https.summary). Applying CharlesCraft replaces these routes for this service. If apps require an existing HTTP proxy, configure and verify CharlesCraft's HTTP upstream proxy first. Settings are not copied automatically. Stop/Quit restores the saved settings.")
                     .font(.caption).foregroundStyle(.orange).textSelection(.enabled)
             }
             HStack {
-                Button("Use Lens for this service") { store.connectMacCapture() }
+                Button("Use CharlesCraft for this service") { store.connectMacCapture() }
                     .disabled(!store.isRunning || systemProxy.isBusy || systemProxy.hasBackup || systemProxy.snapshot == nil || systemProxy.snapshot?.automaticConfigurationIssue != nil)
                 Button("Restore previous settings") { systemProxy.restore() }.disabled(!systemProxy.hasBackup || systemProxy.isBusy)
             }
             Text("These buttons may request macOS administrator permission. Only HTTP and HTTPS are changed. Previous settings are saved for Stop, Quit, and crash recovery; external changes are never overwritten.").font(.caption).foregroundStyle(.secondary)
-            if !store.isRunning { Text("Start Lens before applying the system proxy.").font(.caption).foregroundStyle(.secondary) }
+            if !store.isRunning { Text("Start CharlesCraft before applying the system proxy.").font(.caption).foregroundStyle(.secondary) }
             if systemProxy.hasBackup { Label("Recovery saved for \(systemProxy.backupService ?? "a network service").", systemImage: "arrow.uturn.backward.circle").font(.caption) }
             if let message = systemProxy.message { Text(message).font(.caption).foregroundStyle(.secondary).textSelection(.enabled) }
             if let error = systemProxy.error { Text(error).font(.caption).foregroundStyle(.red).textSelection(.enabled).lineLimit(5).help(error) }

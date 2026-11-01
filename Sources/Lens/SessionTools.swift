@@ -186,11 +186,11 @@ struct LensSessionToolsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Session storage").font(.title2.weight(.semibold))
+            CraftPanelHeading(title: "Session files", subtitle: "Save, import and export captured evidence.", icon: "folder")
             Form {
                 Section("HAR session") {
                     Text("Save replaces the selected file atomically. Merge HAR adds entries to this session; Open as new session preserves it. Autosave writes the latest changing session every 30 seconds.").font(.caption).foregroundStyle(.secondary)
-                    Text("Lens HAR preserves unknown timings and unavailable bodies. Strict HAR tools may reject incomplete entries.").font(.caption).foregroundStyle(.secondary)
+                    Text("CharlesCraft HAR preserves unknown timings and unavailable bodies. Strict HAR tools may reject incomplete entries.").font(.caption).foregroundStyle(.secondary)
                     HStack {
                         TextField("Absolute HAR file path", text: $autosaveDraft).accessibilityLabel("Autosave file path")
                         Button("Use file") { archives.selectAutosavePath(autosaveDraft) }.disabled(archives.saving || archives.autosaveEnabled)
@@ -225,7 +225,7 @@ struct LensSessionToolsView: View {
             }.formStyle(.grouped)
             Text(archives.message).font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
             HStack { Spacer(); Button("Done") { dismiss() }.keyboardShortcut(.defaultAction) }
-        }.padding(22).frame(width: 680, height: 690)
+        }.padding(22).frame(width: 680, height: 690).craftSheet()
         .onAppear { autosaveDraft = archives.autosavePath; mirrorDraft = archives.mirrorPath }
     }
 }

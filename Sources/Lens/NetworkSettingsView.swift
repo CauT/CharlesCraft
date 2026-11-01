@@ -17,19 +17,19 @@ struct LensClientCertificatesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("TLS client certificates").font(.title2.weight(.semibold))
+                CraftPanelHeading(title: "Client certificates", subtitle: "Identify this client to an upstream server.", icon: "lock.shield")
                 Spacer()
                 Button("Add identity") { selections.append(ClientCertificateSelection()) }.disabled(locked || selections.count >= 32)
             }
             Text("Select a certificate and matching private key for an exact upstream host and port. PKCS#12 (.p12/.pfx) and combined PEM files are supported.")
                 .foregroundStyle(.secondary)
-            Text("Passwords and private keys stay in memory. Selections are kept until you remove them or quit Lens; no password, key or identity selection is saved in preferences or captures. Certificates are checked before listeners open on the next Start.")
+            Text("Passwords and private keys stay in memory. Selections are kept until you remove them or quit CharlesCraft; no password, key or identity selection is saved in preferences or captures. Certificates are checked before listeners open on the next Start.")
                 .font(.caption).foregroundStyle(.secondary)
-            if locked { Label("Stop Lens before editing identities. Existing TLS connections keep their original identity until Stop.", systemImage: "lock").font(.caption) }
+            if locked { Label("Stop CharlesCraft before editing identities. Existing TLS connections keep their original identity until Stop.", systemImage: "lock").font(.caption) }
             VStack(alignment: .leading, spacing: 6) {
                 TextField("Optional absolute upstream CA bundle path (PEM)", text: $upstreamCA)
                     .textFieldStyle(.roundedBorder).accessibilityLabel("Upstream CA bundle path")
-                Text("Leave blank for the default public roots. An explicit bundle replaces those roots for Lens's upstream connections. Chain and hostname verification stay enabled; system trust is unchanged.")
+                Text("Leave blank for the default public roots. An explicit bundle replaces those roots for CharlesCraft's upstream connections. Chain and hostname verification stay enabled; system trust is unchanged.")
                     .font(.caption).foregroundStyle(.secondary)
             }.disabled(locked)
             ScrollView {
@@ -69,7 +69,7 @@ struct LensClientCertificatesView: View {
                     dismiss()
                 }.buttonStyle(.borderedProminent).keyboardShortcut(.defaultAction).disabled(!locked && issue != nil)
             }
-        }.padding(24).frame(width: 730)
+        }.padding(24).frame(width: 730).craftSheet()
         .onAppear { selections = store.clientCertificates; upstreamCA = store.upstreamCA }
         .onDisappear { selections.removeAll() }
     }
@@ -183,17 +183,17 @@ struct LensNetworkSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Network settings").font(.title2.weight(.semibold))
+            CraftPanelHeading(title: "Network settings", subtitle: "Listeners, upstream routing and bandwidth.", icon: "network")
             Text("Shape captured traffic and configure additional local listeners.").foregroundStyle(.secondary)
             Form {
                 Section("HTTP upstream proxy") {
                     TextField("Blank = direct, e.g. http://127.0.0.1:7897", text: $upstreamProxy)
                         .accessibilityLabel("HTTP upstream proxy URL")
                         .disabled(locked || store.settingsSaving)
-                    Text("Route Lens HTTP/HTTPS traffic through an existing HTTP proxy. HTTPS uses CONNECT with normal certificate verification. An unavailable upstream fails the request; Lens never falls back to a direct connection. This does not change Mac system proxies.")
+                    Text("Route CharlesCraft HTTP/HTTPS traffic through an existing HTTP proxy. HTTPS uses CONNECT with normal certificate verification. An unavailable upstream fails the request; CharlesCraft never falls back to a direct connection. This does not change Mac system proxies.")
                         .font(.caption).foregroundStyle(.secondary)
                     Text("One unauthenticated HTTP endpoint for both protocols. Other upstream types, authentication and bypass lists are not available yet.").font(.caption).foregroundStyle(.secondary)
-                    if locked { Label("Stop Lens before changing its upstream proxy.", systemImage: "lock").font(.caption) }
+                    if locked { Label("Stop CharlesCraft before changing its upstream proxy.", systemImage: "lock").font(.caption) }
                     if let upstreamIssue { Text(upstreamIssue).font(.caption).foregroundStyle(.orange) }
                     if let upstreamMessage { Text(upstreamMessage).font(.caption).foregroundStyle(.secondary) }
                     HStack { Spacer(); Button("Save upstream proxy") {
@@ -254,7 +254,7 @@ struct LensNetworkSettingsView: View {
                     TextField("Reverse origin, e.g. https://example.com", text: $reverseURL)
                         .accessibilityLabel("Reverse proxy target URL")
                     Text("Both listeners are off by default and bind only to 127.0.0.1. Use separate ports from the main HTTP proxy (\(store.port)).").font(.caption).foregroundStyle(.secondary)
-                    if locked { Label("Stop Lens before changing listener ports or the reverse target.", systemImage: "lock").font(.caption).foregroundStyle(.secondary) }
+                    if locked { Label("Stop CharlesCraft before changing listener ports or the reverse target.", systemImage: "lock").font(.caption).foregroundStyle(.secondary) }
                     if let issue = listenerIssue { Label(issue, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange) }
                     HStack { Spacer(); Button("Save listener settings") { saveListeners() }.disabled(locked || listenerIssue != nil || store.settingsSaving) }
                 }
@@ -262,7 +262,7 @@ struct LensNetworkSettingsView: View {
                 Section("Host client processes") {
                     Toggle("Identify local client processes", isOn: $identifyClientProcesses)
                     Text("Off by default. New HTTP, HTTPS, SOCKS and reverse connections briefly wait for a bounded host socket lookup. The Overview retains a process name and PID, or an explicit unknown reason. The lookup does not identify remote Android/iOS apps or raw TCP/UDP traffic.").font(.caption).foregroundStyle(.secondary)
-                    if locked { Label("Stop Lens before changing process identification.", systemImage: "lock").font(.caption) }
+                    if locked { Label("Stop CharlesCraft before changing process identification.", systemImage: "lock").font(.caption) }
                     HStack { Spacer(); Button("Save process setting") {
                         guard !locked else { return }
                         store.identifyClientProcesses = identifyClientProcesses
@@ -277,7 +277,7 @@ struct LensNetworkSettingsView: View {
                 Button("Done") { dismiss() }.keyboardShortcut(.defaultAction)
             }
         }
-        .padding(22).frame(width: 620, height: 680)
+        .padding(22).frame(width: 620, height: 680).craftSheet()
         .onAppear {
             upload = String(store.uploadKbps); download = String(store.downloadKbps)
             socksPort = store.socksPort; reversePort = store.reversePort; reverseURL = store.reverseURL

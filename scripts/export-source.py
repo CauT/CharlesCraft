@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export only tracked Lens source and public documentation into a new folder."""
+"""Export only tracked CharlesCraft source and public documentation into a new folder."""
 import argparse
 import hashlib
 import json
@@ -11,8 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 FOLDERS = ("Sources/", "engine/", "tests/", "scripts/", ".github/", "docs/guide/")
 FILES = {"README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "VERSION",
          "CONTRIBUTING.md", "SECURITY.md", "CHANGELOG.md", ".gitignore",
-         "docs/images/README.md", "docs/images/lens-icon.png",
-         "docs/images/setup-guide-english.jpg", "docs/images/phone-setup-english.jpg"}
+         "docs/images/README.md", "docs/images/charlescraft-icon.png",
+         "docs/images/lens-icon.png", "docs/images/setup-guide-english.jpg",
+         "docs/images/phone-setup-english.jpg"}
+
+OPTIONAL_FILES = {"docs/images/charlescraft-workspace.png", "docs/images/charlescraft-setup.png"}
 
 
 def export(destination):
@@ -26,7 +29,7 @@ def export(destination):
     for name in filter(None, paths):
         source = repository / name
         relative = source.relative_to(ROOT).as_posix()
-        if relative not in FILES and not relative.startswith(FOLDERS):
+        if relative not in FILES | OPTIONAL_FILES and not relative.startswith(FOLDERS):
             continue
         if source.is_symlink() or not source.is_file():
             raise ValueError(f"Only regular tracked files can be published: {relative}")

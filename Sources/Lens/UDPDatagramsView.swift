@@ -24,7 +24,7 @@ struct LensUDPDatagramsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("UDP forwarding & datagrams").font(.title2.weight(.semibold))
+                CraftPanelHeading(title: "UDP datagrams", subtitle: "Forward packets with their boundaries intact.", icon: "point.3.connected.trianglepath.dotted")
                 Spacer()
                 Button("Done") { dismiss() }.keyboardShortcut(.defaultAction)
             }
@@ -56,7 +56,7 @@ struct LensUDPDatagramsView: View {
                     Spacer()
                     Button("Save forwarding settings") {
                         store.udpForwards = forwards
-                        store.applyRules { success in message = success ? "Saved. Start Lens to listen on these ports." : "Could not save settings." }
+                        store.applyRules { success in message = success ? "Saved. Start CharlesCraft to listen on these ports." : "Could not save settings." }
                     }.disabled(issue != nil || store.settingsSaving)
                 }
                 }.disabled(locked)
@@ -113,7 +113,7 @@ struct LensUDPDatagramsView: View {
             }.frame(minHeight: 150)
             Text(message).font(.caption).foregroundStyle(.secondary)
             Text("Recording is selected when a UDP association starts. Only forwarded datagrams are captured: 4 MiB / 1024 per association; 32 MiB total including 512 B accounting per retained datagram. HAR and TCP files do not contain UDP data.").font(.caption).foregroundStyle(.secondary)
-        }.padding(22).frame(width: 940, height: 780)
+        }.padding(22).frame(width: 940, height: 780).craftSheet()
         .onAppear { forwards = store.udpForwards }
         .onChange(of: selection) { offset = 0; refresh() }
         .onChange(of: store.udpGeneration) {

@@ -33,7 +33,7 @@ struct BreakpointEditor: View {
     @State private var readingFile = false
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Edit paused \(draft.stage)").font(.title2.weight(.semibold))
+            CraftPanelHeading(title: "Edit paused \(draft.stage)", subtitle: "Review the message before letting it continue.", icon: "pause.circle")
             Text("Flow \(draft.flowID) · this paused stage only").font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
             ScrollView { HTTPMessageFieldsEditor(draft: $draft.message, readingFile: $readingFile, issue: $issue) }
             if let issue { Text(issue).font(.caption).foregroundStyle(.red).textSelection(.enabled) }
@@ -44,7 +44,7 @@ struct BreakpointEditor: View {
                 Button("Continue unchanged") { submit(unchanged: true) }
                 Button(sending ? "Continuing…" : "Apply and continue") { submit() }.buttonStyle(.borderedProminent)
             }
-        }.padding(20).frame(minWidth: 760, minHeight: 580).disabled(sending || readingFile).interactiveDismissDisabled(sending || readingFile)
+        }.padding(20).frame(minWidth: 760, minHeight: 580).craftSheet().disabled(sending || readingFile).interactiveDismissDisabled(sending || readingFile)
     }
     private func submit(abort: Bool = false, unchanged: Bool = false) {
         do {

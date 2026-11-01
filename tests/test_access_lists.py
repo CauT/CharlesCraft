@@ -75,7 +75,7 @@ class AccessListAcceptance(unittest.TestCase):
         with self.client() as client:
             reply = client.get(url)
         self.assertEqual(reply.status_code, 403)
-        self.assertEqual(reply.content, b'Blocked by Lens access list')
+        self.assertEqual(reply.content, b'Blocked by CharlesCraft access list')
         self.assertNotIn('X-Bypass', reply.headers)
         self.assertEqual(self.engine.flow(url)['access_decision']['reason'], 'block_match')
         self.assert_not_forwarded(url)

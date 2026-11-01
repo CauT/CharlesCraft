@@ -30,7 +30,7 @@ final class LensAppDelegate: NSObject, NSApplicationDelegate {
     private func presentQuit(_ sender: NSApplication, store: LensStore, failure: String? = nil) {
         let alert = NSAlert()
         alert.messageText = "Save workspace changes before quitting?"
-        alert.informativeText = "The workspace has changes beyond its last verified Save. The path below receives the final snapshot of every HTTP, WebSocket, TCP and UDP session. " + (store.isRunning || store.isStarting ? "Saving first stops capture and finishes session file operations. Cancel keeps Lens open." : "Capture is stopped. Cancel keeps the retained workspace open; use Start to resume capture.") + " A private recovery copy is retained by the normal Stop process."
+        alert.informativeText = "The workspace has changes beyond its last verified Save. The path below receives the final snapshot of every HTTP, WebSocket, TCP and UDP session. " + (store.isRunning || store.isStarting ? "Saving first stops capture and finishes session file operations. Cancel keeps CharlesCraft open." : "Capture is stopped. Cancel keeps the retained workspace open; use Start to resume capture.") + " A private recovery copy is retained by the normal Stop process."
         alert.addButton(withTitle: "Save and Quit")
         alert.addButton(withTitle: "Cancel").keyEquivalent = "\u{1b}"
         alert.addButton(withTitle: "Quit without saving")

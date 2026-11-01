@@ -1,5 +1,5 @@
 {
-  "source_commit": "93f8c4c824a3f39c0f5f1fd32cd13b58372ceeef",
+  "source_commit": "b79ef5a04596e569e1971f97b3f1bd32bb0c46f9",
   "source_dirty": false,
   "files": [
     {
@@ -12,7 +12,7 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "sha256": "345d8a0781c040dc141191b0bad81b11df19a789fd25ca315ccdfb686edca647"
+      "sha256": "78155af8287a3851bc107d941102ba416d2ea4747d9034fed6d7ed92644d57f8"
     },
     {
       "path": ".gitignore",
@@ -20,7 +20,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "sha256": "251c6ebd5f6d97602f0d77c726b4e89ddb2c30724101b09f4e2ffad325a3c3a7"
+      "sha256": "b1908266087b9d1831dee905dfa21dd2f543b5e97e00427027e499c861312c09"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -32,7 +32,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "2ea7581b5a2e1e7ea0c6fc657f6961133437e9599bf2e664ac97e51395d4709b"
+      "sha256": "95a651b862cef200fa6f6ccfdc697753b08353e100971e0ad78076db592d3559"
     },
     {
       "path": "SECURITY.md",
@@ -40,11 +40,11 @@
     },
     {
       "path": "Sources/Lens/AccessListsView.swift",
-      "sha256": "e4d06057a69af5baef730edf19725687e70bc8b4e1051a09f84536eaa96dd51f"
+      "sha256": "c55ccc41d0b86de1f149f27e0ec92240afd42adac4a9b6ea7be37a3aee9b5acd"
     },
     {
       "path": "Sources/Lens/ApplicationLifecycle.swift",
-      "sha256": "6fd74bc6ec41adb893a2ea3082eaca9a199c7b7028494f9696a89ffbea2958e1"
+      "sha256": "dab468053cb961141ba3773313187aba544672c50bdf06c7dab7f80e0887f249"
     },
     {
       "path": "Sources/Lens/BodyFormatting.swift",
@@ -52,11 +52,11 @@
     },
     {
       "path": "Sources/Lens/BodyTextView.swift",
-      "sha256": "159506ee74c36f2c6d88f3bd7eb61f02800728cbd4161e1ef2907088adac243e"
+      "sha256": "b0b397f48ac80a26825f317f1bd15433418d46dd8b5eaf8b4bad63cf703fc672"
     },
     {
       "path": "Sources/Lens/BreakpointEditor.swift",
-      "sha256": "a2cb7d331a4c824829c4f450d1bbeb882d319d8d1546bf5b5490bc13a356028a"
+      "sha256": "2c2c61cac459924b9d8269e7e3a1018dbdcd3846b4c36914858af1a94585a964"
     },
     {
       "path": "Sources/Lens/CaptureGuide.swift",
@@ -64,11 +64,15 @@
     },
     {
       "path": "Sources/Lens/ComposeView.swift",
-      "sha256": "a983db9233a799f35a1f7bafd6032cca65e70fd47214f38f753347c3585a9529"
+      "sha256": "7b0bcbdf8ad5248fd6bf279beb0f6ec3c5ed5879372b1b6d399865527dffcb85"
     },
     {
       "path": "Sources/Lens/ConnectionGuideView.swift",
-      "sha256": "05c99cbb9d28a9379f5ed6993b21a2f001c32d72f22d24b7d8fa133d62a5d4e1"
+      "sha256": "7fb5686c29ce9d1834b5f91a7401f49745b771245a34564a181788a06a3371a7"
+    },
+    {
+      "path": "Sources/Lens/CraftDesign.swift",
+      "sha256": "049cec56d890eeba5a1c76e7c93a0f379f3bac0ec66fd08cfd1c4a0ce0529ab3"
     },
     {
       "path": "Sources/Lens/CurlCommand.swift",
@@ -80,7 +84,7 @@
     },
     {
       "path": "Sources/Lens/JSONBodyView.swift",
-      "sha256": "38974eb4752884f1ba89a1c2235ebdfe49ccae48c8d5e2d1b2995bc46bd06a56"
+      "sha256": "0a41e91ca10e500ced7e291460ce470485db8c4d8ab1dd3c492d628986d687a2"
     },
     {
       "path": "Sources/Lens/JSONDocument.swift",
@@ -92,11 +96,11 @@
     },
     {
       "path": "Sources/Lens/LensApp.swift",
-      "sha256": "df857b0fe60f9dfe0a7cd6428c17fbd66f1dcc3d9dd9bf6295109910224c52e8"
+      "sha256": "95e8eb5c52aa09d85fc8e924e6a55f6e5fe5ebdb4c00d6701ad73d585fdd4549"
     },
     {
       "path": "Sources/Lens/LensStore.swift",
-      "sha256": "a168ce2f1478aa86d531110b7596639980c65996dac58ded5a908b4476a455ba"
+      "sha256": "2edc3b9f7d1746b7513544e90bc0c142701b08c5ef9f9b313f72c4276ada8920"
     },
     {
       "path": "Sources/Lens/Models.swift",
@@ -112,19 +116,19 @@
     },
     {
       "path": "Sources/Lens/NetworkSettingsView.swift",
-      "sha256": "00fc727005730f3f940d46e445d12c85f4ca9344c9a0a7bd9cc2fe1f245bd505"
+      "sha256": "3e2cbc8acaa0851d996ccc5ea6654b980908e170fd83f248a0cff5b51c4ee18e"
     },
     {
       "path": "Sources/Lens/RepeatView.swift",
-      "sha256": "adaf588ce2aeb5f359d554a06d6fd5ef156f0cef73aa53ceebd8e209aa4567d8"
+      "sha256": "e970af77210f2e4eb13d36e16e8ee21f37a7ab8f90ebc8573a8415b1a9444ac1"
     },
     {
       "path": "Sources/Lens/RulesView.swift",
-      "sha256": "3990a113fcae65b5c6c9b2bb455a2aaf2d74ce4a875adea0df0080d11637b021"
+      "sha256": "1804f8e6bb409a0ace422b4d26bd6fc6812eaa944f27695779f33416e06e4198"
     },
     {
       "path": "Sources/Lens/SessionActionView.swift",
-      "sha256": "52f34bbe9aa0b53228bb86b539fa0789763d917391734818e1e9bdf7a8c38099"
+      "sha256": "a72077f1d189d90a4f0fd6830450dd195818422ade146715b47e7edade1273bd"
     },
     {
       "path": "Sources/Lens/SessionArtifacts.swift",
@@ -132,27 +136,27 @@
     },
     {
       "path": "Sources/Lens/SessionTools.swift",
-      "sha256": "a5c8018185b4df9716bf98e10e8a1da2a5e18cc31919abecd4eed2711ac9f57c"
+      "sha256": "57c8162c150321d781bf043c8bc0107b1f9bed65e65f18982a191055403c8228"
     },
     {
       "path": "Sources/Lens/SystemProxy.swift",
-      "sha256": "7783b4c9100708277a6d1feaa56b949a5715c64dffcdbc4a8caae07a43245501"
+      "sha256": "08433c17445be162b1c75d0e33b303c33cdb1523f54de266d38dac667492d2d7"
     },
     {
       "path": "Sources/Lens/TCPStreamsView.swift",
-      "sha256": "fd53b3d0874935184c9897ff3ed01c63089f53e1ebfd6ea7f0a1788b1a2cd593"
+      "sha256": "05472085177f076f5fe2c5b52a582b1c3f9c1d7cc8017fe956584ac45744d096"
     },
     {
       "path": "Sources/Lens/UDPDatagramsView.swift",
-      "sha256": "c04bd4b89c75f16fad2c93570917465fc5aad75cb3e2ad03fa70f1f1482be0b3"
+      "sha256": "747f4ab2d43c48393fbd5b65beeceadc34cdb8b8c2c6831cf931c43b41401edb"
     },
     {
       "path": "Sources/Lens/Views.swift",
-      "sha256": "beea386a5b9560a95dceeb7dcb507c3452483b9c16bb5c3a8b1c2e0d6480c87e"
+      "sha256": "f80f0bc297c0204387f2b9f706b1609f81f9c43ccfbfa25d5ca117673c50b4fb"
     },
     {
       "path": "Sources/Lens/WebSocketView.swift",
-      "sha256": "7455885240d71ef7a0e74db4449bdf2c5861d781e41f63d5feb2b062a9b8bed4"
+      "sha256": "7ff747ca1639a96e951d92bfdaed0ba442105f6c5b45add629557a739fbb69c0"
     },
     {
       "path": "Sources/Lens/WorkspaceDocumentState.swift",
@@ -176,15 +180,19 @@
     },
     {
       "path": "VERSION",
-      "sha256": "1725bfa6524c5265e7c171cf06568417d39b947fff49c242f03859479c82334b"
+      "sha256": "d915cc95d6ca8f47ae297713ed46d4e5c5d99ddd29fc3c61e263bdf305f2b5b0"
+    },
+    {
+      "path": "docs/guide/craft-redesign.md",
+      "sha256": "cc0b82a73ea24c4a2a2203b9bcd2a1cab28f1014e4ef52c9d574ce52ae2cfd62"
     },
     {
       "path": "docs/guide/development.md",
-      "sha256": "196ad3931bc330ec9784535bffdc7821322b94a28fc0caafbdebb67fa7243937"
+      "sha256": "0a890890beac09b9c77cc1a73ce5761f3cedccbf2063383e7bed0bf1601eae19"
     },
     {
       "path": "docs/guide/json-viewer.md",
-      "sha256": "d51ff159bcab3d55ad14df9af65a6a8daae6b1a6183cd3a6d2d0a833894b2f02"
+      "sha256": "7b844c1fd721b60121a6cf3e0c7c15086a72b8d73c0875359599886347b7e3e8"
     },
     {
       "path": "docs/guide/preview-acceptance.md",
@@ -192,19 +200,23 @@
     },
     {
       "path": "docs/guide/releasing.md",
-      "sha256": "286a9996528a3dc7c67a3ff9be2241716e5661b5ff0733557c5732118701178e"
+      "sha256": "3ead5b5558b7ed578b83b1a72a77e9ed6e83ffe96953d36f535584ce7fbbac01"
     },
     {
       "path": "docs/guide/usage.md",
-      "sha256": "f50f183bb1edb901a5d87755be21389d9f10f277544b3c68f2bc916046605529"
+      "sha256": "c78875eb7461d7823ff17789f6daaa116462f937e8d1ac26c9d25e1a67f40b12"
     },
     {
       "path": "docs/guide/verification.md",
-      "sha256": "6a41d0d5a512d500d50b4ae1db3748d2050598a0d19bcb242e4f3d5a9ef5bad6"
+      "sha256": "67bdd65e3861ff877f23727b1ca9ea6aac57761e480cc8afc6357f0f1b42aca5"
     },
     {
       "path": "docs/images/README.md",
-      "sha256": "4aafe0bafce21e057a88ecf2d9dd5e56ce9526bd94db3b0f0a38263e0af567c3"
+      "sha256": "143cb86821f75df8bcc600040130d7e74da7d337ecbaf890167408d32399ca81"
+    },
+    {
+      "path": "docs/images/charlescraft-icon.png",
+      "sha256": "26558822946e96e0497d83ff55d9e7ecc35d10fdedca393a46e197c8f55ab731"
     },
     {
       "path": "docs/images/lens-icon.png",
@@ -256,7 +268,7 @@
     },
     {
       "path": "engine/engine.py",
-      "sha256": "4a35022177a7ee191b6795c8501bfb463eef7bcee949407bb3b4cfaa69cdfea7"
+      "sha256": "b364788f5d9a0bd43600062c956f899e84a3c85b9be0e76860e807e6893bbbf2"
     },
     {
       "path": "engine/forwarding.py",
@@ -324,7 +336,7 @@
     },
     {
       "path": "engine/public_bootstrap.py",
-      "sha256": "70d8acdf7c17c93bd3f38c34ed899716b3fc16e26e952c0998aa322c93c55968"
+      "sha256": "e284b015d841fb6a6118a139553edb686c36abd56f8bab0f5e84bd511374d24b"
     },
     {
       "path": "engine/remote_mapping.py",
@@ -452,7 +464,7 @@
     },
     {
       "path": "engine/test_public_bootstrap.py",
-      "sha256": "04a07ac0d831cdbebec9c07831e1df3a9313f0a60de5f09c2eb119ffd8a289c5"
+      "sha256": "b83739e170382b62875cb8f270e41112a516cbeab5fe0bd8ab9422957d3819ab"
     },
     {
       "path": "engine/test_remote_mapping.py",
@@ -536,15 +548,15 @@
     },
     {
       "path": "scripts/build-app.sh",
-      "sha256": "f65fef1dcfff25ecd350d7103ce29f59d2e7eaeebece8518b7766207c2e5fa28"
+      "sha256": "d4bd6d7b556585dcb121e2f1e398434fa7aa4b48aaa2327b52697f4ef355a8b7"
     },
     {
       "path": "scripts/export-source.py",
-      "sha256": "8a2703b76579e34e55cf8022fb9c447f8d535c815195c685502aa4bcfa5fc8c6"
+      "sha256": "02815bde6f4e32cb222e158d14b00365859172ba30acf7918cec252d562b8d2a"
     },
     {
       "path": "scripts/make-icon.swift",
-      "sha256": "093516d843f9d992ff4c17cb52dd1cef59b7281c855e537a7cf2f31719578c01"
+      "sha256": "fa6b38e72dec911c2b4903850d053155006de9f43f1ea1ef9d7f1d64cb0aa0d3"
     },
     {
       "path": "scripts/package-app.py",
@@ -552,7 +564,7 @@
     },
     {
       "path": "scripts/package-dmg.py",
-      "sha256": "1a270e1c9857821431736ab2e9e5ae7646aa9b25b0b4aa7932c2bc6a3d2b3ab8"
+      "sha256": "e80b30219e8d58128aa216712dd71a523771cfa4ad19df306d08603fa7386228"
     },
     {
       "path": "scripts/test-android-proxy.sh",
@@ -568,11 +580,11 @@
     },
     {
       "path": "scripts/test-onboarding.sh",
-      "sha256": "0f7822142dd16549fe2bee44ef188a032c77933253ae565d01ef19a604ee49be"
+      "sha256": "589c26bf3d2af3686a948bc32601ca9ea8d0c371cb847f94984fdda78cd981ed"
     },
     {
       "path": "scripts/test-workspace-files.sh",
-      "sha256": "12e4215538eb585b8b7b81d5edb289c2850f7b9cb2580fc4e55eae45d2c118ad"
+      "sha256": "938dac364f5c427b81983b1033ed704c03132651891b5aa72ae0054fa5547b80"
     },
     {
       "path": "tests/access_store_smoke.swift",
@@ -600,7 +612,7 @@
     },
     {
       "path": "tests/body_text_layout_smoke.swift",
-      "sha256": "083c754bfb8dc134051cb8d8bfd7a181be832c525793b3f10c0cc732f7d72a08"
+      "sha256": "82427e174f499fdd1f5831ba47fef245dc054304fc061cdd3dd9defafd32d632"
     },
     {
       "path": "tests/breakpoint_store_smoke.swift",
@@ -668,7 +680,7 @@
     },
     {
       "path": "tests/onboarding_store_smoke.swift",
-      "sha256": "94ec5cec5a1dc72fc5a89faab65bda38bb83255c3cbce20b05af179376e377a6"
+      "sha256": "cdd572fab8e9b31eb6af269d3928f0db0e7c3d3c27e31ac6134c8b22cb117f2c"
     },
     {
       "path": "tests/quit_store_smoke.swift",
@@ -708,7 +720,7 @@
     },
     {
       "path": "tests/test_access_lists.py",
-      "sha256": "f0537ff86770e2d7393a9ed851eb6867491c948e96821615cf4ad7e64ea0f5b5"
+      "sha256": "97502b007d83aa4aa3189a9d6cdbe1fa872da72c6e921a46864627f6e7faf564"
     },
     {
       "path": "tests/test_android_proxy_client.py",
@@ -724,7 +736,7 @@
     },
     {
       "path": "tests/test_breakpoint_editing.py",
-      "sha256": "218ba1dfccdbce4647b7d5c806b32bf082e04a45ddda86fe25fa90657c568f90"
+      "sha256": "14371d1a7f710c2006f5c2236c913dc3957a8a74387ed359a9efb908a1c1971a"
     },
     {
       "path": "tests/test_clear_workflows.py",
@@ -760,7 +772,7 @@
     },
     {
       "path": "tests/test_forwarding_ranges.py",
-      "sha256": "8009878027e38ef536fd647225f6fa3dd5c0bd446771ddc703bdd9a4553bfeff"
+      "sha256": "e2ebc0f0662c667045cf71e8a2669d682a9ae97ff0942c0ff6c605c8da832f7c"
     },
     {
       "path": "tests/test_har_fidelity.py",
@@ -776,7 +788,7 @@
     },
     {
       "path": "tests/test_lan_proxy.py",
-      "sha256": "2f473ba5185173007ea621d4503e35ab588526aa8c567b3df219f392670f4c2b"
+      "sha256": "1ae4258cd37c92b3b7b79ef1e5596cbfe064d3152be816f82f761c51209917c7"
     },
     {
       "path": "tests/test_map_local.py",
@@ -848,7 +860,7 @@
     },
     {
       "path": "tests/test_udp_forwarding.py",
-      "sha256": "f0200c68c52c07d03a0222b99b2a98a9746e983b99120a70edfd782dd8840be0"
+      "sha256": "4c705c10e7deee8dbdbf82f25f7e6f4325a28d967945a559486c03ffea7582f0"
     },
     {
       "path": "tests/test_unavailable_bodies.py",
@@ -882,5 +894,38 @@
       "path": "tests/workspace_file_store_smoke.swift",
       "sha256": "bef40d52d19ea2e139e6b74f8d696c03cd2fd0c227d262f824034056ebf27b3c"
     }
-  ]
+  ],
+  "public_documentation_updates": {
+    "reason": "Actual 0.3.0 screenshots, final UI acceptance and distribution scope; implementation files match the source export.",
+    "files": [
+      {
+        "path": "README.md",
+        "sha256": "4eaf4dc667403b045762852d662a73d15811e810c788ee1e1dd05cf70af3e801"
+      },
+      {
+        "path": "docs/guide/craft-redesign.md",
+        "sha256": "ece7533fdf0505522840ed176b1deb8a3a4badc1e58386577623344a35a35fa3"
+      },
+      {
+        "path": "docs/guide/verification.md",
+        "sha256": "14e9fb4a346b878758258221b908204b65dda407e92536b72731d7bc3f7737bd"
+      },
+      {
+        "path": "docs/images/README.md",
+        "sha256": "690634a23f499818e98b1be268d4f01b84344364bdcfad03e9d4817f94b1a57f"
+      },
+      {
+        "path": "docs/images/charlescraft-workspace.png",
+        "sha256": "e3417d68c394274c72f49b55e8af8d6a4f5bbedd8aa988c353b5beeac83c8ae0"
+      },
+      {
+        "path": "docs/images/charlescraft-setup.png",
+        "sha256": "7f499d0ecaa44035cd281be231a8d385705c76a086d3a8307af65a0c2d87b375"
+      },
+      {
+        "path": "docs/guide/craft-preview-acceptance.md",
+        "sha256": "6e945f85c82d47c62a457a1aba0a5284dd82e9ebeeaa959962973c8823861534"
+      }
+    ]
+  }
 }

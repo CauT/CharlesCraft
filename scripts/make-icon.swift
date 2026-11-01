@@ -13,16 +13,24 @@ for size in [16, 32, 64, 128, 256, 512, 1024] {
     let transform = NSAffineTransform(); transform.scale(by: scale); transform.concat()
     let rect = NSRect(x: 58, y: 58, width: 908, height: 908)
     let shape = NSBezierPath(roundedRect: rect, xRadius: 202, yRadius: 202)
-    NSGradient(starting: NSColor(srgbRed: 0.13, green: 0.34, blue: 0.96, alpha: 1), ending: NSColor(srgbRed: 0.12, green: 0.08, blue: 0.39, alpha: 1))!.draw(in: shape, angle: -75)
-    let ring = NSBezierPath(ovalIn: NSRect(x: 236, y: 280, width: 472, height: 472))
-    NSColor.white.withAlphaComponent(0.95).setStroke(); ring.lineWidth = 66; ring.stroke()
-    let handle = NSBezierPath(); handle.move(to: NSPoint(x: 666, y: 320)); handle.line(to: NSPoint(x: 806, y: 180)); handle.lineWidth = 72; handle.lineCapStyle = .round; handle.stroke()
-    for (index, width) in [144.0, 230.0, 166.0].enumerated() {
-        let bar = NSBezierPath(roundedRect: NSRect(x: 358, y: 600 - CGFloat(index) * 84, width: width, height: 30), xRadius: 15, yRadius: 15)
-        NSColor.white.withAlphaComponent(0.92).setFill(); bar.fill()
+    NSGradient(starting: NSColor(srgbRed: 0.08, green: 0.17, blue: 0.25, alpha: 1), ending: NSColor(srgbRed: 0.03, green: 0.43, blue: 0.49, alpha: 1))!.draw(in: shape, angle: -55)
+    let circuit = NSBezierPath()
+    circuit.move(to: NSPoint(x: 730, y: 716))
+    circuit.line(to: NSPoint(x: 410, y: 716))
+    circuit.curve(to: NSPoint(x: 260, y: 566), controlPoint1: NSPoint(x: 320, y: 716), controlPoint2: NSPoint(x: 260, y: 656))
+    circuit.line(to: NSPoint(x: 260, y: 458))
+    circuit.curve(to: NSPoint(x: 410, y: 308), controlPoint1: NSPoint(x: 260, y: 368), controlPoint2: NSPoint(x: 320, y: 308))
+    circuit.line(to: NSPoint(x: 730, y: 308))
+    circuit.lineWidth = 70; circuit.lineCapStyle = .round
+    NSColor.white.setStroke(); circuit.stroke()
+    let exchange = NSBezierPath()
+    exchange.move(to: NSPoint(x: 455, y: 512)); exchange.line(to: NSPoint(x: 725, y: 512))
+    exchange.lineWidth = 58; exchange.lineCapStyle = .round
+    NSColor(srgbRed: 0.27, green: 0.91, blue: 0.85, alpha: 1).setStroke(); exchange.stroke()
+    for point in [NSPoint(x: 730, y: 716), NSPoint(x: 730, y: 308)] {
+        NSColor(srgbRed: 0.27, green: 0.91, blue: 0.85, alpha: 1).setFill()
+        NSBezierPath(ovalIn: NSRect(x: point.x - 53, y: point.y - 53, width: 106, height: 106)).fill()
     }
-    NSColor(srgbRed: 0.35, green: 0.98, blue: 0.77, alpha: 1).setFill()
-    NSBezierPath(ovalIn: NSRect(x: 720, y: 724, width: 102, height: 102)).fill()
     image.unlockFocus()
     let representation = NSBitmapImageRep(data: image.tiffRepresentation!)!
     let data = representation.representation(using: .png, properties: [:])!

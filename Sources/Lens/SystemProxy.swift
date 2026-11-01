@@ -74,7 +74,7 @@ struct SystemProxySnapshot: Equatable {
 
     var automaticConfigurationIssue: String? {
         if http.authenticated || https.authenticated { return "Authenticated proxies cannot be restored without their credentials. Use manual configuration." }
-        if pacEnabled || discoveryEnabled { return "PAC or automatic proxy discovery is enabled. Lens leaves it unchanged; use manual configuration." }
+        if pacEnabled || discoveryEnabled { return "PAC or automatic proxy discovery is enabled. CharlesCraft leaves it unchanged; use manual configuration." }
         if (http.enabled && (http.server.isEmpty || http.port == 0)) || (https.enabled && (https.server.isEmpty || https.port == 0)) {
             return "The current enabled proxy has incomplete settings. Use manual configuration."
         }
@@ -217,7 +217,7 @@ struct SystemProxyOperations {
         guard backup.version == 1, backup.service == current.service, backup.location == current.location else {
             throw SystemProxyError(message: "The original network service or location cannot be identified. The recovery record was retained; no settings were changed.")
         }
-        guard !backup.http.authenticated && !backup.https.authenticated else { throw SystemProxyError(message: "The recovery record contains authenticated settings that Lens cannot restore.") }
+        guard !backup.http.authenticated && !backup.https.authenticated else { throw SystemProxyError(message: "The recovery record contains authenticated settings that CharlesCraft cannot restore.") }
         var commands = ["set -eu", guardOutput(["-getcurrentlocation"], equals: current.location)]
         var conflicts: [String] = []
         var needsRestore = false
@@ -396,8 +396,8 @@ final class SystemProxyController: ObservableObject {
 
     private func applyLens(port: Int, expected: SystemProxyLaunchSelection?, completion: (() -> Void)?) {
         guard !isBusy else { completion?(); return }
-        guard !hasBackup else { error = "Restore the existing proxy recovery record before applying Lens again."; completion?(); return }
-        guard !selectedService.isEmpty, (1024...65535).contains(port) else { error = "Choose a network service and a valid Lens proxy port."; completion?(); return }
+        guard !hasBackup else { error = "Restore the existing proxy recovery record before applying CharlesCraft again."; completion?(); return }
+        guard !selectedService.isEmpty, (1024...65535).contains(port) else { error = "Choose a network service and a valid CharlesCraft proxy port."; completion?(); return }
         isBusy = true; error = nil; message = nil
         let service = selectedService, runner = self.runner, backupURL = self.backupURL
         let remember = rememberOnLaunch
@@ -409,12 +409,12 @@ final class SystemProxyController: ObservableObject {
                 let snapshot = try operations.snapshot(service: service)
                 if let issue = snapshot.automaticConfigurationIssue { throw SystemProxyError(message: issue) }
                 if let expected, SystemProxyLaunchSelection(snapshot) != expected {
-                    throw SystemProxyError(message: "The network location or previous proxy settings changed. Review System proxy and explicitly reconnect; Lens did not replace the new settings.")
+                    throw SystemProxyError(message: "The network location or previous proxy settings changed. Review System proxy and explicitly reconnect; CharlesCraft did not replace the new settings.")
                 }
                 selected = SystemProxyLaunchSelection(snapshot)
                 let intended = SystemProxyEndpoint(enabled: true, server: "127.0.0.1", port: port, authenticated: false)
                 // Refuse an indistinguishable pre-existing proxy: Lens cannot establish ownership of it.
-                guard snapshot.http != intended && snapshot.https != intended else { throw SystemProxyError(message: "This service already points to Lens. Use manual configuration or restore an existing recovery record first.") }
+                guard snapshot.http != intended && snapshot.https != intended else { throw SystemProxyError(message: "This service already points to CharlesCraft. Use manual configuration or restore an existing recovery record first.") }
                 let backup = SystemProxyBackup(version: 1, service: service, location: snapshot.location, createdAt: Date(), http: snapshot.http, https: snapshot.https, intended: intended)
                 try FileManager.default.createDirectory(at: backupURL.deletingLastPathComponent(), withIntermediateDirectories: true)
                 let data = try JSONEncoder().encode(backup)
@@ -437,7 +437,7 @@ final class SystemProxyController: ObservableObject {
                         let choice = remember ? selected : nil
                         try self.saveCaptureChoice(choice)
                         self.launchSelection = choice; self.hasCaptureChoice = true
-                        self.message = "Lens now handles HTTP and HTTPS for \(service). Previous settings are saved for recovery." + (remember ? " This service will reconnect on launch while its previous settings remain unchanged." : " Automatic reconnection is off.")
+                        self.message = "CharlesCraft now handles HTTP and HTTPS for \(service). Previous settings are saved for recovery." + (remember ? " This service will reconnect on launch while its previous settings remain unchanged." : " Automatic reconnection is off.")
                     } catch { self.error = "Mac proxy is connected, but its launch preference could not be saved: \(error.localizedDescription). Recovery remains available." }
                 case .failure(let error): self.error = error.localizedDescription + (saved == nil ? "" : " Recovery record retained; use Restore previous settings to inspect and recover.")
                 }
@@ -470,7 +470,7 @@ final class SystemProxyController: ObservableObject {
                 }
                 let restored = try operations.snapshot(service: backup.service)
                 guard restored.location == backup.location, restored.http == backup.http, restored.https == backup.https else {
-                    let changed = plan.conflicts.isEmpty ? "Some previous settings could not be verified." : "\(plan.conflicts.joined(separator: " and ")) settings were changed outside Lens and were not overwritten."
+                    let changed = plan.conflicts.isEmpty ? "Some previous settings could not be verified." : "\(plan.conflicts.joined(separator: " and ")) settings were changed outside CharlesCraft and were not overwritten."
                     throw SystemProxyError(message: changed + " The recovery record was retained at \(backupURL.path).")
                 }
                 try FileManager.default.removeItem(at: backupURL)

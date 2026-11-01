@@ -29,7 +29,7 @@ Before delivery, normally open the final packaged app, generate controlled
 traffic, inspect visible Request/Response headers and body, then verify Stop/Quit
 and cleanup. Record the actual artifact identity. Test counts alone are insufficient.
 
-Lens originated in MIT-licensed REA. Standalone `SOURCE_PROVENANCE.json` records
+CharlesCraft continues Lens, which originated in MIT-licensed REA. Standalone `SOURCE_PROVENANCE.json` records
 the exported source hashes. Private captures, CA keys, evidence, SDKs, caches and
 unrelated REA code are excluded. Charles was a workflow reference; its code and
 artwork are not included. Preserve third-party licenses when changing dependencies.

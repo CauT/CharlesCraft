@@ -187,7 +187,7 @@ class ForwardingRangeAcceptance(unittest.TestCase):
 
     def failed_start(self, configuration, http, socks, suffix):
         path = os.environ.get("LENS_TEST_ENGINE", str(ROOT / "engine/engine.py"))
-        result = subprocess.run([sys.executable, "-u", path, "--proxy-port", str(http),
+        result = subprocess.run([sys.executable, "-B", "-u", path, "--proxy-port", str(http),
             "--socks-port", str(socks), "--data-dir", str(self.directory / suffix), "--initialize-from-stdin"],
             input=json.dumps({"command": "initialize", "command_id": suffix, **configuration}) + "\n",
             text=True, capture_output=True, timeout=20)

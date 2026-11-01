@@ -364,7 +364,7 @@ class BreakpointEditingAcceptance(unittest.TestCase):
                     self.resume(response, response_edit={'reason': 'Local edited', 'headers': [['X-Local', 'yes']]})
                 reply = pending.result(timeout=9)
                 self.assertEqual(reply.status_code, 403 if mode == 'access' else 200)
-                self.assertEqual(reply.content, b'Blocked by Lens access list' if mode == 'access' else payload)
+                self.assertEqual(reply.content, b'Blocked by CharlesCraft access list' if mode == 'access' else payload)
                 captured = self.engine.flow(target, after=self.after)
                 self.assertEqual(self.detail(captured)['state'], 'complete')
                 entry = self.entry(captured['id'])

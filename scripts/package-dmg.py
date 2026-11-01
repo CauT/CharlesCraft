@@ -29,6 +29,8 @@ def package(app, output, development=False):
     report_path = output.with_suffix(".verification.json")
     if output.is_relative_to(app) or output.exists() or report_path.exists():
         raise common.PackageError("Output must be new and outside the application")
+    application_name = app.name
+    product_name = app.stem
     before = common.tree(app)
     signature = common.verify(app, development)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -37,20 +39,20 @@ def package(app, output, development=False):
     try:
         stage, mount = work / "stage", work / "mounted"
         stage.mkdir(); mount.mkdir()
-        common.run("/usr/bin/ditto", "--norsrc", "--noextattr", str(app), str(stage / "Lens.app"))
+        common.run("/usr/bin/ditto", "--norsrc", "--noextattr", str(app), str(stage / application_name))
         (stage / "Applications").symlink_to("/Applications")
         (stage / "Read Me.txt").write_text(
-            "Lens for macOS\n\nDrag Lens.app into Applications, then eject this disk.\n"
+            f"{product_name} for macOS\n\nDrag {application_name} into Applications, then eject this disk.\n"
             "Requires macOS 14 or later and the matching CPU architecture.\n\n" +
             ("EXPERIMENTAL PREVIEW: ad-hoc signed, NOT Developer ID signed or notarized.\n"
              "macOS may block opening this download. Source builds are available.\n"
              if development else "Developer ID and notarization verified during packaging.\n") +
-            "\nSetup and source: https://github.com/CauT/lens-proxy\n"
-            "Lens changes system proxy or certificate trust only with your explicit setup.\n"
+            "\nSetup and source: https://github.com/CauT/CharlesCraft\n"
+            "System proxy changes require explicit setup. Certificate trust is never changed automatically.\n"
             "For device capture, configure the device proxy; keep your Mac route intact.\n")
         image = work / output.name
         common.run("/usr/bin/hdiutil", "create", "-fs", "HFS+", "-format", "UDZO",
-                   "-volname", "Lens Preview" if development else "Lens", "-srcfolder", str(stage), str(image))
+                   "-volname", product_name + " Preview" if development else product_name, "-srcfolder", str(stage), str(image))
         common.run("/usr/bin/hdiutil", "verify", str(image))
         mounted = mount
         attachment = common.run("/usr/bin/hdiutil", "attach", "-readonly", "-nobrowse", "-noautoopen",
@@ -58,15 +60,15 @@ def package(app, output, development=False):
         entities = plistlib.loads(attachment.encode())["system-entities"]
         if not any(item.get("mount-point") == str(mount) for item in entities):
             raise common.PackageError("DMG did not mount at its owned mount point")
-        if sorted(p.name for p in mount.iterdir() if not p.name.startswith(".")) != ["Applications", "Lens.app", "Read Me.txt"]:
+        if sorted(p.name for p in mount.iterdir() if not p.name.startswith(".")) != sorted(["Applications", application_name, "Read Me.txt"]):
             raise common.PackageError("Unexpected files in DMG")
         if not (mount / "Applications").is_symlink() or os.readlink(mount / "Applications") != "/Applications":
             raise common.PackageError("Invalid Applications shortcut")
-        if common.tree(mount / "Lens.app") != before:
+        if common.tree(mount / application_name) != before:
             raise common.PackageError("Mounted application differs from source")
-        common.verify(mount / "Lens.app", development)
-        copied = work / "copied" / "Lens.app"
-        common.run("/usr/bin/ditto", "--norsrc", "--noextattr", str(mount / "Lens.app"), str(copied))
+        common.verify(mount / application_name, development)
+        copied = work / "copied" / application_name
+        common.run("/usr/bin/ditto", "--norsrc", "--noextattr", str(mount / application_name), str(copied))
         if common.tree(copied) != before:
             raise common.PackageError("Copied application differs from source")
         common.verify(copied, development)

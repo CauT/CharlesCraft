@@ -24,13 +24,13 @@ struct LensAccessListsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Access Lists").font(.title2.weight(.semibold))
+                CraftPanelHeading(title: "Access Lists", subtitle: "Decide which HTTP requests can pass.", icon: "hand.raised")
                 Spacer()
                 Button("Done") { dismiss() }.keyboardShortcut(.cancelAction)
             }
             Text("Control HTTP requests with URL globs. * matches any characters; ? matches one. Block List matches win. With Allow List enabled, an empty list denies every request.")
                 .foregroundStyle(.secondary)
-            Text("Both the original request URL and each mapped destination must pass these lists. This also applies to Compose, Replay and Repeat. HTTPS is covered only when Lens can decrypt the request. Opaque CONNECT tunnels, raw TCP and UDP are outside this policy; the local certificate download is exempt. Device connection permissions remain in Connection.")
+            Text("Both the original request URL and each mapped destination must pass these lists. This also applies to Compose, Replay and Repeat. HTTPS is covered only when CharlesCraft can decrypt the request. Opaque CONNECT tunnels, raw TCP and UDP are outside this policy; the local certificate download is exempt. Device connection permissions remain in Connection.")
                 .font(.caption).foregroundStyle(.secondary)
             HStack(alignment: .top, spacing: 16) {
                 patternList("Block List", enabled: $policy.blockEnabled, patterns: $blockPatterns)
@@ -54,11 +54,11 @@ struct LensAccessListsView: View {
                     store.accessPolicy = selectedPolicy
                     store.applyRules { success in
                         saving = false
-                        message = success ? (store.isRunning ? "Access Lists applied." : "Access Lists saved. Start capture to apply.") : "Could not apply Access Lists. Check the Lens error message."
+                        message = success ? (store.isRunning ? "Access Lists applied." : "Access Lists saved. Start capture to apply.") : "Could not apply Access Lists. Check the CharlesCraft error message."
                     }
                 }.buttonStyle(.borderedProminent).disabled(selectedPolicy.issue != nil || saving || store.settingsSaving)
             }
-        }.padding(22).frame(width: 840, height: 620)
+        }.padding(22).frame(width: 840, height: 620).craftSheet()
         .onAppear {
             policy = store.accessPolicy
             blockPatterns = policy.block.map { AccessPatternDraft(text: $0) }
@@ -91,6 +91,6 @@ struct LensAccessListsView: View {
                     }
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
-        }.padding(12).background(.quaternary.opacity(0.3)).clipShape(RoundedRectangle(cornerRadius: 8))
+        }.craftCard()
     }
 }

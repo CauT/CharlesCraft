@@ -7,7 +7,7 @@ struct LensApp: App {
     @StateObject private var store = LensStore()
 
     var body: some Scene {
-        Window("Lens", id: "workspace") {
+        Window("CharlesCraft", id: "workspace") {
             LensWorkspaceView(store: store)
                 .onAppear { delegate.store = store; store.openWorkspace() }
                 .background(LensWorkspaceCloseBridge { NSApp.terminate(nil) })

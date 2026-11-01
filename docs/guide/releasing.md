@@ -5,11 +5,11 @@ identity. Local builds are ad-hoc signed. A DMG does not add Apple distribution 
 
 ```sh
 bash scripts/build-app.sh
-/usr/bin/python3 -B scripts/package-dmg.py Lens.app \
-  .build/delivery/Lens-0.2.4-macOS-arm64-development.dmg --development-only
+/usr/bin/python3 -B scripts/package-dmg.py CharlesCraft.app \
+  .build/delivery/CharlesCraft-0.3.0-macOS-arm64-development.dmg --development-only
 ```
 
-The packager creates a compressed read-only HFS+ image with Lens.app and an
+The packager creates a compressed read-only HFS+ image with CharlesCraft.app and an
 Applications shortcut. It checks the image checksum, mounts read-only, compares
 all app bytes/modes/symlinks, verifies strict deep signatures, copies the mounted
 app into a fresh directory and verifies again. Existing output names are refused.

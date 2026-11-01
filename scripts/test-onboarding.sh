@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 LENS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LENS_RESOURCES="${1:-$LENS_ROOT/Lens.app/Contents/Resources}"
+LENS_RESOURCES="${1:-$LENS_ROOT/CharlesCraft.app/Contents/Resources}"
 : "${LENS_TEST_LAN_ADDRESS:?Select an IPv4 address assigned to the test Mac}"
 LENS_OUT="$LENS_ROOT/.build/onboarding-tests"
 mkdir -p "$LENS_OUT" "$LENS_ROOT/.build/ModuleCache"

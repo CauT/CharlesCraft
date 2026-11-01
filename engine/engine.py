@@ -358,7 +358,7 @@ class Lens:
             port = data.server.address[1]
             if any(sock.getsockname()[1] == port for server in self.network.servers.values()
                    for sock in (server.sockets or [])):
-                data.server.error = "Lens cannot proxy a request back into its own public listeners"
+                data.server.error = "CharlesCraft cannot proxy a request back into its own public listeners"
         if not data.server.error:
             await self.sdk_connections.server_connect(data, self.network.settings["connect_timeout_seconds"])
 
@@ -722,7 +722,7 @@ class Lens:
         else:
             # Access denial is terminal: later mappings/rewrites and response
             # rules must not convert it into an allowed request or success page.
-            flow.response = http.Response.make(403, b"Blocked by Lens access list", {
+            flow.response = http.Response.make(403, b"Blocked by CharlesCraft access list", {
                 "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store"})
         return True
 
@@ -798,7 +798,7 @@ class Lens:
                     except (OSError, ValueError) as exc:
                         flow.response = http.Response.make(502, str(exc).encode())
                 elif kind == "block":
-                    flow.response = http.Response.make(403, b"Blocked by Lens rule", {"Content-Type": "text/plain"})
+                    flow.response = http.Response.make(403, b"Blocked by CharlesCraft rule", {"Content-Type": "text/plain"})
                 elif kind == "delay":
                     await asyncio.sleep(float(value) / 1000)
 
@@ -1021,7 +1021,7 @@ class Lens:
             if not self.capture_stopped:
                 for flow in list(self.sessions.all_flows()):
                     if flow.intercepted:
-                        flow.metadata["lens_breakpoint_error"] = "Breakpoint cancelled because Lens stopped; request aborted."
+                        flow.metadata["lens_breakpoint_error"] = "Breakpoint cancelled because CharlesCraft stopped; request aborted."
                         abort_paused(flow)
                         self.remember(flow)
                 await self.quiesce_network_work()
@@ -1385,7 +1385,7 @@ class Lens:
         self.closed = True
         for flow in self.sessions.all_flows():
             if flow.intercepted:
-                flow.metadata["lens_breakpoint_error"] = "Breakpoint cancelled because Lens stopped; request aborted."
+                flow.metadata["lens_breakpoint_error"] = "Breakpoint cancelled because CharlesCraft stopped; request aborted."
                 abort_paused(flow)
         await self.quiesce_network_work()
         await self.certificate_inputs.close()

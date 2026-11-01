@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — CharlesCraft
+
+- Rename the visible product, app/executable, icon and installer to CharlesCraft. Preserve the bundle identity, existing Lens settings, CA and workspace formats.
+- Redesign the workspace around persistent tool navigation, capture status, session tabs, request sequence and an inspector with separate message views.
+- Introduce the Craft visual system across connection guides, rules, access policies, network/client certificates, compose/repeat/breakpoints, session files and TCP/UDP/WebSocket viewers.
+- Redesign the responsive device setup page and retain the existing lens.invalid connection endpoint.
+- Package DMGs using the actual input application name instead of a hard-coded Lens.app.
+
+
 ## 0.2.4 — JSON readability (unreleased)
 
 - Add Tree / Pretty / Source JSON reading, type colors, line numbers and wrapping.

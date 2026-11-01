@@ -1,10 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 LENS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LENS_RESOURCES="${1:-$LENS_ROOT/Lens.app/Contents/Resources}"
+LENS_RESOURCES="${1:-$LENS_ROOT/CharlesCraft.app/Contents/Resources}"
 LENS_OUT="$LENS_ROOT/.build/workspace-file-tests"
 if [[ ! -x "$LENS_RESOURCES/python/bin/python3" || ! -f "$LENS_RESOURCES/engine/engine.py" ]]; then
-  echo "Pass a built Lens.app Contents/Resources directory." >&2
+  echo "Pass a built CharlesCraft.app Contents/Resources directory." >&2
   exit 1
 fi
 mkdir -p "$LENS_OUT" "$LENS_ROOT/.build/ModuleCache"

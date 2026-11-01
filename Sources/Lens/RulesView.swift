@@ -15,7 +15,7 @@ struct LensRulesView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Traffic rules").font(.title2.weight(.semibold)); Spacer()
+                CraftPanelHeading(title: "Traffic rules", subtitle: "Shape requests and responses, in order.", icon: "slider.horizontal.3"); Spacer()
                 Button("Add Rewrite set") { rules.append(.rewriteSet()) }
                 Button { rules.append(ProxyRule()) } label: { Label("Add rule", systemImage: "plus") }
             }
@@ -45,7 +45,7 @@ struct LensRulesView: View {
                 } }
                     .buttonStyle(.borderedProminent).keyboardShortcut(.defaultAction).disabled(invalid)
             }
-        }.padding(24).frame(width: 800).disabled(store.settingsSaving)
+        }.padding(24).frame(width: 800).craftSheet().disabled(store.settingsSaving)
          .onAppear { rules = store.rules }
     }
     private func binding(_ id: String) -> Binding<ProxyRule> {
@@ -81,7 +81,7 @@ private struct LensRewriteSetEditor: View {
             }
             Button("Add Rewrite rule") { rule.rewriteRules.append(ProxyRule()) }
             if let issue = rule.rewriteIssue { Label(issue, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange) }
-        }.padding(12).background(Color.accentColor.opacity(0.06), in: RoundedRectangle(cornerRadius: 10))
+        }.craftCard()
     }
     private func child(_ id: String) -> Binding<ProxyRule> {
         Binding(get: { rule.rewriteRules.first { $0.id == id } ?? ProxyRule() }, set: { value in
@@ -130,7 +130,7 @@ private struct LensTrafficRuleEditor: View {
                      ? "Requests ask for fresh content. Responses tell clients not to store them."
                      : "Removes all cookies sent with the request and all cookies set by the response.")
                     .font(.caption).foregroundStyle(.secondary)
-                Text("Matches the original client URL for both request and response, on HTTP traffic visible to Lens. Later rules can override this rule. Existing browser cache and cookies are not cleared.")
+                Text("Matches the original client URL for both request and response, on HTTP traffic visible to CharlesCraft. Later rules can override this rule. Existing browser cache and cookies are not cleared.")
                     .font(.caption).foregroundStyle(.secondary)
             }
             if !snapshot.rewriteModes.isEmpty {

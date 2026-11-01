@@ -17,7 +17,7 @@ struct LensRepeatView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("Repeat requests").font(.title2.weight(.semibold))
+            CraftPanelHeading(title: "Repeat requests", subtitle: "Reproduce a request with controlled concurrency.", icon: "repeat")
             if let current = currentSource {
                 Text("\(current.method)  \(current.url)").font(.system(.callout, design: .monospaced)).textSelection(.enabled).lineLimit(3)
             } else { Text("The source request is no longer retained.").foregroundStyle(.secondary) }
@@ -58,11 +58,11 @@ struct LensRepeatView: View {
                             Text("Job \(job.id) · source \(job.sourceId ?? "Not recorded")").font(.caption).textSelection(.enabled)
                             ProgressView(value: Double(job.finishedCount), total: Double(max(1, job.total)))
                             Text("\(job.completed) completed · \(job.failed) failed · \(job.cancelled) cancelled").font(.caption).foregroundStyle(.secondary)
-                        }.padding(12).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
+                        }.craftCard()
                     }
                     if store.repeatJobs.isEmpty { Text("No repeat jobs yet.").foregroundStyle(.secondary).frame(maxWidth: .infinity).padding(20) }
                 }
             }.frame(height: 180)
-        }.padding(24).frame(width: 620)
+        }.padding(24).frame(width: 620).craftSheet()
     }
 }

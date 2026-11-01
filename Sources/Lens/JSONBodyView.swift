@@ -36,7 +36,7 @@ struct LensJSONBodyView: View {
                     Button("Copy selected value") { copyValue() }.disabled(selected == nil)
                     Button("Copy JSON Pointer") { copyPointer() }.disabled(selected == nil || selected.map(document.pointerIsAmbiguous) == true)
                 } label: { Image(systemName: "doc.on.doc") }.menuStyle(.borderlessButton).fixedSize().help("Copy JSON").accessibilityLabel("Copy JSON")
-            }.controlSize(.small)
+            }.controlSize(.small).padding(9).background(CraftDesign.accent.opacity(0.06), in: RoundedRectangle(cornerRadius: 8))
             if mode != .source {
                 HStack(spacing: 6) {
                     TextField("Find key or value", text: $query).textFieldStyle(.roundedBorder).accessibilityLabel("Search JSON keys and values")
@@ -72,7 +72,8 @@ struct LensJSONBodyView: View {
                 case .source:
                     LensBodyTextView(text: document.source, title: "\(title) JSON source", wrapLines: wrap, lineNumbers: true)
                 }
-            }.frame(height: 460).background(Color(nsColor: .textBackgroundColor), in: RoundedRectangle(cornerRadius: 6))
+            }.frame(height: 460).background(CraftDesign.surface, in: RoundedRectangle(cornerRadius: 8))
+                .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(CraftDesign.line))
             if let selected {
                 let path = document.pointer(selected)
                 HStack(spacing: 6) {

@@ -61,7 +61,7 @@ final class LensStore: ObservableObject {
     var canSaveWorkspace: Bool { hasEngine && canCreateSession }
     var canOpenWorkspace: Bool { hasEngine && canCreateSession && sessionAction == nil }
     var workspaceWindowTitle: String {
-        "Lens — " + (workspaceFileURL.map { $0.lastPathComponent + " — " } ?? "") + currentSessionName + (workspaceDocument.isEdited ? " — Edited" : "")
+        "CharlesCraft — " + (workspaceFileURL.map { $0.lastPathComponent + " — " } ?? "") + currentSessionName + (workspaceDocument.isEdited ? " — Edited" : "")
     }
     var needsWorkspaceSaveConfirmation: Bool { workspaceDocument.needsConfirmation(hasContent: hasWorkspaceRecords || sessions.count != 1 || sessions.first?.name != "Untitled Session 1") }
     var hasWorkspaceRecords: Bool {
@@ -536,7 +536,7 @@ final class LensStore: ObservableObject {
         } catch { errorMessage = error.localizedDescription; return }
         let runtime = resources.appendingPathComponent("python/bin/python3")
         let engine = resources.appendingPathComponent("engine/engine.py")
-        guard FileManager.default.isExecutableFile(atPath: runtime.path) else { errorMessage = "The bundled proxy runtime is missing. Rebuild Lens using scripts/build-app.sh."; return }
+        guard FileManager.default.isExecutableFile(atPath: runtime.path) else { errorMessage = "The bundled proxy runtime is missing. Rebuild CharlesCraft using scripts/build-app.sh."; return }
         let task = Process(), stdin = Pipe(), stdout = Pipe(), stderr = Pipe()
         task.executableURL = runtime
         task.arguments = ["-u", engine.path, "--native-json", "--proxy-port", String(number), "--data-dir", dataDirectory.path]
@@ -647,7 +647,7 @@ final class LensStore: ObservableObject {
     func stop(completion: ((Bool) -> Void)? = nil) {
         let system = systemProxy
         guard !system.isBusy else {
-            errorMessage = "Wait for the system proxy operation to finish before stopping Lens."
+            errorMessage = "Wait for the system proxy operation to finish before stopping CharlesCraft."
             completion?(false); return
         }
         if system.hasBackup {
@@ -748,7 +748,7 @@ final class LensStore: ObservableObject {
     func shutdown(backupPath: String? = nil, completion: @escaping (Bool) -> Void) {
         if let backupPath {
             guard backupPath.hasPrefix("/"), !backupPath.contains("\0") else { errorMessage = "Select an absolute workspace copy path."; completion(false); return }
-            guard !exiting else { errorMessage = "Lens is already shutting down; a new workspace copy cannot be admitted."; completion(false); return }
+            guard !exiting else { errorMessage = "CharlesCraft is already shutting down; a new workspace copy cannot be admitted."; completion(false); return }
             do { try FileManager.default.createDirectory(at: dataDirectory.appendingPathComponent("session-backups"), withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700]) }
             catch { errorMessage = error.localizedDescription; completion(false); return }
         }
@@ -1122,7 +1122,7 @@ final class LensStore: ObservableObject {
             completion?(false); return
         }
         guard !isStarting, !stopping, !restarting, !exiting else {
-            errorMessage = "Wait for Lens to finish starting or stopping before saving settings."
+            errorMessage = "Wait for CharlesCraft to finish starting or stopping before saving settings."
             completion?(false); return
         }
         do {

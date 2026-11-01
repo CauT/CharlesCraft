@@ -1,14 +1,19 @@
 import AppKit
 import SwiftUI
 
-// Rulers and scrollers change the clip viewport after representable updates.
-// Own the wrapped document width here, after AppKit has tiled those controls.
+// Hosted AppKit rulers can overlay the clip view instead of reducing its width.
+// Exclude their actual overlap when owning the wrapped document's viewport.
 final class LensBodyScrollView: NSScrollView {
     var wrapsLines = true
     override func tile() {
         super.tile()
         guard wrapsLines, let text = documentView as? NSTextView else { return }
-        let width = max(contentView.bounds.width, 1)
+        var width = contentView.bounds.width
+        if rulersVisible, hasVerticalRuler, let ruler = verticalRulerView, !ruler.isHidden {
+            let overlap = contentView.convert(ruler.bounds, from: ruler).intersection(contentView.bounds)
+            if !overlap.isNull { width -= overlap.width }
+        }
+        width = max(width, 1)
         if abs(text.frame.width - width) > 0.5 {
             text.setFrameSize(NSSize(width: width, height: max(text.frame.height, contentView.bounds.height)))
         }

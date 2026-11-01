@@ -1,19 +1,19 @@
-# Using Lens
+# Using CharlesCraft
 
 ## Mac
 
 Open **Connection → Get Started → This Mac**. Confirm the listener is ready, review
-the active service and existing proxy settings, then explicitly select **Use Lens
+the active service and existing proxy settings, then explicitly select **Use CharlesCraft
 for this service**. Alternatively use manual clients only. Some applications
 ignore system proxies. An empty request list does not prove an engine failure.
 
 For HTTPS, reveal the **public** CA in Connection, verify its fingerprint, and
 manually import/trust it on the client. On macOS use the intended keychain's SSL
-trust settings. Lens never silently trusts a CA. **SSL hosts** chooses targets:
+trust settings. CharlesCraft never silently trusts a CA. **SSL hosts** chooses targets:
 `*` for all proxied hosts, empty for encrypted tunneling. Changes affect new connections.
 
 Pause recording keeps forwarding; Stop closes listeners while retaining details.
-Quit releases the engine. Lens restores only proxy settings it still owns and
+Quit releases the engine. CharlesCraft restores only proxy settings it still owns and
 does not overwrite externally changed settings. Before replacing Clash or another
 route, configure an explicit HTTP upstream under Network if needed. PAC,
 authenticated upstreams and arbitrary VPN coexistence are not automatic.
@@ -89,7 +89,7 @@ warning or a redacted screenshot. Never bypass TLS warnings to claim a pass.
 
 Settings and the CA are under `~/Library/Application Support/Lens/`. This includes
 a **private signing key**: distribute only the public CA. Captures, snapshots
-and exports may contain credentials. Lens has no hosted capture service.
+and exports may contain credentials. CharlesCraft has no hosted capture service.
 
 HTTP retention: 2,000 requests / 256 MiB body bytes; single HTTP body: 32 MiB.
 Inspector previews: up to 2 MiB per side with explicit truncation. WebSocket

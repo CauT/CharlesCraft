@@ -26,8 +26,8 @@ jobs:
         run: bash scripts/test-json-viewer.sh
       - name: Wire and process identity workflows
         env:
-          PYTHONPATH: ${{ github.workspace }}/Lens.app/Contents/Resources/site-packages
-          LENS_TEST_ENGINE: ${{ github.workspace }}/Lens.app/Contents/Resources/engine/engine.py
+          PYTHONPATH: ${{ github.workspace }}/CharlesCraft.app/Contents/Resources/site-packages
+          LENS_TEST_ENGINE: ${{ github.workspace }}/CharlesCraft.app/Contents/Resources/engine/engine.py
         run: |
           .runtime/bin/python -B -m unittest discover -s tests -p test_e2e.py -v
           .runtime/bin/python -B -m unittest discover -s tests -p test_peer_process.py -v

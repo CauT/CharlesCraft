@@ -22,19 +22,26 @@ struct LensWorkspaceView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            macCaptureStatus
-            Divider()
-            sessionBar
+            workspaceHeading
             Divider()
             HSplitView {
-                sidebar.frame(minWidth: 170, idealWidth: 200, maxWidth: 300)
-                traffic.frame(minWidth: 420, idealWidth: 650)
-                LensInspectorView(store: store).id(store.currentSessionID).frame(minWidth: 340, idealWidth: 440)
+                sidebar.frame(minWidth: 195, idealWidth: 225, maxWidth: 310)
+                VStack(spacing: 0) {
+                    macCaptureStatus
+                    Divider()
+                    sessionBar
+                    Divider()
+                    HSplitView {
+                        traffic.frame(minWidth: 380, idealWidth: 600)
+                        LensInspectorView(store: store).id(store.currentSessionID).frame(minWidth: 340, idealWidth: 460)
+                    }
+                }
             }
             Divider()
             statusBar
         }
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(CraftDesign.canvas)
+        .tint(CraftDesign.accent)
         .navigationTitle(store.workspaceWindowTitle)
         .toolbar { workspaceToolbar }
         .searchable(text: $store.search, placement: .toolbar, prompt: "Filter traffic")
@@ -54,9 +61,30 @@ struct LensWorkspaceView: View {
             systemProxy.refreshRouting()
         }
         .onReceive(Timer.publish(every: 5, on: .main, in: .common).autoconnect()) { _ in systemProxy.refreshRouting() }
-        .alert("Lens", isPresented: Binding(get: { store.errorMessage != nil && !store.quitPending }, set: { if !$0 { store.errorMessage = nil } })) {
+        .alert(CraftDesign.productName, isPresented: Binding(get: { store.errorMessage != nil && !store.quitPending }, set: { if !$0 { store.errorMessage = nil } })) {
             Button("OK") { store.errorMessage = nil }
         } message: { Text(store.errorMessage ?? "") }
+    }
+
+    private var workspaceHeading: some View {
+        HStack(spacing: 12) {
+            CraftMark()
+            VStack(alignment: .leading, spacing: 2) {
+                Text(CraftDesign.productName).font(.system(size: 19, weight: .bold)).foregroundStyle(CraftDesign.ink)
+                Text("NETWORK STUDIO").font(.system(size: 9, weight: .semibold)).tracking(1.5).foregroundStyle(.secondary)
+            }
+            Divider().frame(height: 28).padding(.horizontal, 8)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(store.captureSessionName).font(.callout.weight(.medium)).lineLimit(1)
+                Text("Capture destination").font(.caption2).foregroundStyle(.secondary)
+            }
+            Spacer()
+            CraftBadge(text: store.isStarting ? "STARTING" : !store.isRunning ? "STOPPED" : store.recording ? "RECORDING" : "PAUSED",
+                       color: store.isStarting || (store.isRunning && !store.recording) ? .orange : store.isRunning ? CraftDesign.accent : .secondary)
+            Button { connectionPage = .welcome; showConnection = true } label: {
+                Label("Connect a device", systemImage: "plus")
+            }.buttonStyle(.bordered).controlSize(.large)
+        }.padding(.horizontal, 18).padding(.vertical, 12).background(CraftDesign.surface)
     }
 
     private var macCaptureStatus: some View {
@@ -73,7 +101,9 @@ struct LensWorkspaceView: View {
             }
             Spacer(minLength: 10)
             Button("Get Started") { connectionPage = .welcome; showConnection = true }
-        }.padding(.horizontal, 14).padding(.vertical, 9)
+                .buttonStyle(.borderless).font(.callout.weight(.semibold))
+        }.padding(.horizontal, 16).padding(.vertical, 12)
+            .background(CraftDesign.accent.opacity(0.055))
     }
 
     private var captureHeading: String {
@@ -82,8 +112,8 @@ struct LensWorkspaceView: View {
         if !store.isRunning { return "Proxy stopped" }
         if let address = store.activeLANAddress { return "Device proxy ready · \(address):\(store.port)" }
         if systemProxy.isBusy { return "Checking Mac proxy setup…" }
-        if Int(store.port).map({ systemProxy.routing?.usesLens(port: $0) == true }) == true { return "Mac HTTP & HTTPS proxy points to Lens" }
-        return systemProxy.routing == nil ? "Mac proxy status unavailable — review setup" : "Mac traffic is not connected to Lens"
+        if Int(store.port).map({ systemProxy.routing?.usesLens(port: $0) == true }) == true { return "Mac HTTP & HTTPS proxy points to CharlesCraft" }
+        return systemProxy.routing == nil ? "Mac proxy status unavailable — review setup" : "Mac traffic is not connected to CharlesCraft"
     }
 
     private var captureExplanation: String {
@@ -93,7 +123,7 @@ struct LensWorkspaceView: View {
             return "Set this proxy in the device Wi-Fi settings, then open http://lens.invalid/ to verify the connection. HTTPS also requires CA trust. A ready LAN proxy does not mean the device is connected."
         }
         if store.isRunning, Int(store.port).map({ systemProxy.routing?.usesLens(port: $0) == true }) == true {
-            return "Apps using the system proxy can connect. HTTPS bodies also need trusted Lens certificates and matching SSL hosts."
+            return "Apps using the system proxy can connect. HTTPS bodies also need trusted CharlesCraft certificates and matching SSL hosts."
         }
         return "Choose this Mac, Android or iPhone, then follow Get Started to set up the proxy and HTTPS."
     }
@@ -105,11 +135,14 @@ struct LensWorkspaceView: View {
                         ForEach(store.sessions) { session in
                             Button { store.selectSession(session.id) } label: {
                                 HStack(spacing: 5) {
-                                    if session.id == store.captureSessionID { Image(systemName: "record.circle").foregroundStyle(store.recording ? Color.red : Color.secondary) }
+                                    Image(systemName: session.id == store.captureSessionID ? "record.circle" : "rectangle.stack")
+                                        .foregroundStyle(session.id == store.captureSessionID && store.recording ? CraftDesign.accent : Color.secondary)
                                     Text(session.name).lineLimit(1)
-                                }.padding(.horizontal, 8).padding(.vertical, 5)
+                                }.font(.callout.weight(store.currentSessionID == session.id ? .semibold : .regular))
+                                    .padding(.horizontal, 12).padding(.vertical, 8)
                             }.buttonStyle(.borderless)
-                             .background(store.currentSessionID == session.id ? Color.accentColor.opacity(0.14) : Color.clear, in: RoundedRectangle(cornerRadius: 5))
+                             .background(store.currentSessionID == session.id ? CraftDesign.surface : Color.clear, in: RoundedRectangle(cornerRadius: 7))
+                             .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(store.currentSessionID == session.id ? CraftDesign.line : Color.clear))
                              .contextMenu {
                                 Button("Rename Session…") { store.presentSessionAction(.rename, identity: session.id) }
                                 Button("Close Session…") { store.presentSessionAction(.close, identity: session.id) }
@@ -126,7 +159,15 @@ struct LensWorkspaceView: View {
 
     private var sidebar: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("STRUCTURE").font(.caption.weight(.semibold)).foregroundStyle(.secondary).padding(14)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("WORKSPACE").font(.system(size: 10, weight: .semibold)).tracking(1.3).foregroundStyle(.secondary).padding(.bottom, 6)
+                sidebarTool("Connection guide", icon: "cable.connector") { connectionPage = .welcome; showConnection = true }
+                sidebarTool("Traffic rules", icon: "slider.horizontal.3") { showRules = true }
+                sidebarTool("Access Lists", icon: "hand.raised") { showAccessLists = true }
+                sidebarTool("Network settings", icon: "network") { showNetworkSettings = true }
+            }.padding(14)
+            Divider().padding(.horizontal, 14)
+            Text("EXPLORE TRAFFIC").font(.system(size: 10, weight: .semibold)).tracking(1.3).foregroundStyle(.secondary).padding(14)
             List {
                 Button { store.selectedHost = nil } label: {
                     Label { HStack { Text("All traffic"); Spacer(); Text("\(store.flows.count)").foregroundStyle(.secondary) } } icon: { Image(systemName: "network") }
@@ -164,13 +205,29 @@ struct LensWorkspaceView: View {
                 }
             }
             .listStyle(.sidebar)
-            Spacer(minLength: 0)
+            .scrollContentBackground(.hidden)
+            Divider().padding(.horizontal, 14)
             VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 8) {
+                    Button { showTCPStreams = true } label: { Label("TCP", systemImage: "arrow.left.arrow.right") }
+                    Button { showUDPDatagrams = true } label: { Label("UDP", systemImage: "point.3.connected.trianglepath.dotted") }
+                }.buttonStyle(.borderless).font(.caption)
+                Divider().padding(.vertical, 6)
                 Label("Local proxy", systemImage: "lock.shield")
                     .font(.caption.weight(.medium))
                 Text("127.0.0.1:\(store.port)").font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary)
             }.padding(14)
-        }
+        }.background(CraftDesign.sidebar)
+    }
+
+    private func sidebarTool(_ title: String, icon: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: icon).foregroundStyle(CraftDesign.accent).frame(width: 18)
+                Text(title).foregroundStyle(CraftDesign.ink)
+                Spacer(minLength: 0)
+            }.font(.callout).padding(.vertical, 8).contentShape(Rectangle())
+        }.buttonStyle(.plain)
     }
 
     private func pathGroups(for host: String) -> [LensPathGroup] {
@@ -184,14 +241,17 @@ struct LensWorkspaceView: View {
     private var traffic: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Sequence").font(.headline)
-                Text("\(store.filteredFlows.count)").font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Traffic").font(.system(size: 17, weight: .semibold)).foregroundStyle(CraftDesign.ink)
+                    Text("Every request, in sequence").font(.caption).foregroundStyle(.secondary)
+                }
                 Spacer()
+                CraftBadge(text: "\(store.filteredFlows.count) REQUESTS")
                 if let host = store.selectedHost {
                     Button { store.selectedHost = nil } label: { Label(host, systemImage: "xmark.circle.fill").lineLimit(1) }
                         .buttonStyle(.borderless).font(.caption)
                 }
-            }.padding(12)
+            }.padding(16).background(CraftDesign.surface)
             Divider()
             if store.filteredFlows.isEmpty {
                 ContentUnavailableView {
@@ -201,10 +261,10 @@ struct LensWorkspaceView: View {
                 } actions: {
                     if store.flows.isEmpty {
                         HStack {
-                            Button("Android") { connectionPage = .android; showConnection = true }
-                            Button("iPhone / iPad") { connectionPage = .ios; showConnection = true }
-                            Button("This Mac") { connectionPage = .system; showConnection = true }
-                        }
+                            Button("Android") { connectionPage = .android; showConnection = true }.fixedSize()
+                            Button("iPhone / iPad") { connectionPage = .ios; showConnection = true }.fixedSize()
+                            Button("This Mac") { connectionPage = .system; showConnection = true }.fixedSize()
+                        }.fixedSize(horizontal: true, vertical: false)
                         if store.isRunning && !store.recording { Button("Resume Recording", action: store.toggleRecording) }
                     } else {
                         Button("Clear Filters") { store.search = ""; store.selectedHost = nil }
@@ -212,20 +272,51 @@ struct LensWorkspaceView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                Table(store.filteredFlows, selection: $store.selection) {
-                    TableColumn("Method") { flow in Text(flow.method).font(.system(.caption, design: .monospaced).weight(.semibold)) }.width(62)
-                    TableColumn("Status") { flow in Text(flow.statusLabel).foregroundStyle(statusColor(flow)).font(.caption.monospacedDigit()) }.width(62)
-                    TableColumn("Host", value: \.host).width(min: 100, ideal: 150)
-                    TableColumn("Path") { flow in HStack(spacing: 4) { if flow.replayed { Image(systemName: "arrow.clockwise").help("Replayed request") }; Text(flow.path).lineLimit(1).help(flow.url) } }.width(min: 110, ideal: 240)
-                    TableColumn("Time") { flow in Text(flow.durationLabel).font(.caption.monospacedDigit()).foregroundStyle(.secondary) }.width(75)
-                    TableColumn("Size") { flow in Text(flow.sizeLabel).font(.caption.monospacedDigit()).foregroundStyle(.secondary) }.width(72)
-                }
-                .contextMenu {
-                    Button("Replay", action: store.replay).disabled(store.selection == nil || !store.isRunning)
-                    Button("Copy cURL", action: store.copyCurl).disabled(store.selection == nil || !store.isRunning)
+                GeometryReader { geometry in
+                    // Native table cells add horizontal insets beyond their content
+                    // widths. Budget them before distributing the remaining space.
+                    let showsMetrics = geometry.size.width >= 760
+                    let flexibleWidth = max(140, geometry.size.width - (showsMetrics ? 344 : 194))
+                    Group {
+                        // Separate tables preserve support for macOS 14.0, whose
+                        // TableColumnBuilder cannot conditionally include columns.
+                        if showsMetrics {
+                            Table(store.filteredFlows, selection: $store.selection) {
+                                TableColumn("Method") { flow in trafficMethod(flow) }.width(64)
+                                TableColumn("Status") { flow in trafficStatus(flow) }.width(50)
+                                TableColumn("Host") { flow in Text(flow.host).lineLimit(1).truncationMode(.middle).help(flow.host) }.width(flexibleWidth * 0.40)
+                                TableColumn("Path") { flow in HStack(spacing: 4) { if flow.replayed { Image(systemName: "arrow.clockwise").help("Replayed request") }; Text(flow.path).lineLimit(1).help(flow.url) } }.width(flexibleWidth * 0.60)
+                                TableColumn("Time") { flow in Text(flow.durationLabel).font(.caption.monospacedDigit()).foregroundStyle(.secondary) }.width(60)
+                                TableColumn("Size") { flow in Text(flow.sizeLabel).font(.caption.monospacedDigit()).foregroundStyle(.secondary) }.width(60)
+                            }
+                        } else {
+                            Table(store.filteredFlows, selection: $store.selection) {
+                                TableColumn("Method") { flow in trafficMethod(flow) }.width(64)
+                                TableColumn("Status") { flow in trafficStatus(flow) }.width(50)
+                                TableColumn("Host") { flow in Text(flow.host).lineLimit(1).truncationMode(.middle).help(flow.host) }.width(flexibleWidth * 0.40)
+                                TableColumn("Path") { flow in HStack(spacing: 4) { if flow.replayed { Image(systemName: "arrow.clockwise").help("Replayed request") }; Text(flow.path).lineLimit(1).help(flow.url) } }.width(flexibleWidth * 0.60)
+                            }
+                        }
+                    }
+                    .contextMenu {
+                        Button("Replay", action: store.replay).disabled(store.selection == nil || !store.isRunning)
+                        Button("Copy cURL", action: store.copyCurl).disabled(store.selection == nil || !store.isRunning)
+                    }
                 }
             }
-        }
+        }.background(CraftDesign.surface)
+    }
+
+    private func trafficMethod(_ flow: TrafficFlow) -> some View {
+        CraftBadge(text: flow.method, color: flow.method == "GET" ? CraftDesign.accent : .indigo,
+                   isSelected: store.selection == flow.id)
+    }
+
+    private func trafficStatus(_ flow: TrafficFlow) -> some View {
+        Group {
+            if store.selection == flow.id { Text(flow.statusLabel) }
+            else { Text(flow.statusLabel).foregroundStyle(statusColor(flow)) }
+        }.font(.caption.monospacedDigit())
     }
 
     private var statusBar: some View {
@@ -239,7 +330,7 @@ struct LensWorkspaceView: View {
             Text("·")
             Text(store.totalBytes)
         }
-        .font(.caption).foregroundStyle(.secondary).padding(.horizontal, 14).padding(.vertical, 8)
+        .font(.caption).foregroundStyle(.secondary).padding(.horizontal, 18).padding(.vertical, 9).background(CraftDesign.surface)
     }
 
     @ToolbarContentBuilder private var workspaceToolbar: some ToolbarContent {
@@ -260,9 +351,9 @@ struct LensWorkspaceView: View {
                 Button("Compose new request…") { composeTarget = ComposeTarget(source: nil, sessionID: store.currentSessionID) }
             } label: { Label("Compose", systemImage: "square.and.pencil") }
               primaryAction: { composeTarget = ComposeTarget(source: store.selectedFlow, sessionID: store.currentSessionID) }
+                .labelStyle(.titleAndIcon).accessibilityLabel("Compose request")
+                .help("Compose a new request or edit the selected request")
                 .disabled(!store.isRunning)
-            Button { showRules = true } label: { Label("Rules", systemImage: "slider.horizontal.3") }
-            Button { showAccessLists = true } label: { Label("Access Lists", systemImage: "hand.raised") }
             Menu {
                 Button("New Session", action: store.newSession).disabled(!store.canCreateSession)
                 Button("Rename Session…") { store.presentSessionAction(.rename) }.disabled(!store.hasEngine || !store.canCreateSession)
@@ -275,9 +366,6 @@ struct LensWorkspaceView: View {
                 Divider()
                 Button("Copy cURL", action: store.copyCurl).disabled(store.selection == nil || !store.isRunning)
             } label: { Label("Session", systemImage: "square.and.arrow.up") }
-            Button { showNetworkSettings = true } label: { Label("Network", systemImage: "speedometer") }
-            Button { showTCPStreams = true } label: { Label("TCP streams", systemImage: "arrow.left.arrow.right") }
-            Button { showUDPDatagrams = true } label: { Label("UDP datagrams", systemImage: "point.3.connected.trianglepath.dotted") }
             Menu {
                 Button("Get Started") { connectionPage = .welcome; showConnection = true }
                 Button("Android") { connectionPage = .android; showConnection = true }
@@ -286,6 +374,8 @@ struct LensWorkspaceView: View {
                 Button("Other clients") { connectionPage = .client; showConnection = true }
             } label: { Label("Connection", systemImage: "cable.connector") }
               primaryAction: { connectionPage = .welcome; showConnection = true }
+                .labelStyle(.titleAndIcon).accessibilityLabel("Connection guide")
+                .help("Set up Mac or device capture")
         }
     }
 
@@ -304,14 +394,21 @@ private struct LensInspectorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack { Text("Inspector").font(.headline); Spacer(); Button(action: store.copyCurl) { Image(systemName: "terminal") }.buttonStyle(.borderless).help("Copy as cURL").disabled(store.selectedFlow == nil) }.padding(12)
+            HStack {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Inspector").font(.system(size: 17, weight: .semibold)).foregroundStyle(CraftDesign.ink)
+                    Text("Understand the exchange").font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button(action: store.copyCurl) { Label("cURL", systemImage: "terminal") }.buttonStyle(.borderless).help("Copy as cURL").disabled(store.selectedFlow == nil)
+            }.padding(16).background(CraftDesign.surface)
             Divider()
             if let flow = store.selectedFlow {
                 VStack(alignment: .leading, spacing: 12) {
-                    HStack { Text(flow.method).font(.caption.weight(.bold)); Text(flow.statusLabel).font(.caption).foregroundStyle(flow.state == "paused" ? .orange : .secondary); Spacer(); if flow.isWebsocket { Image(systemName: "arrow.left.arrow.right").help("WebSocket") } }
+                    HStack { CraftBadge(text: flow.method); CraftBadge(text: flow.statusLabel, color: flow.state == "paused" ? .orange : .secondary); Spacer(); Text(flow.durationLabel).font(.caption.monospacedDigit()).foregroundStyle(.secondary); if flow.isWebsocket { Image(systemName: "arrow.left.arrow.right").help("WebSocket") } }
                     Text(flow.url).font(.system(.caption, design: .monospaced)).textSelection(.enabled).lineLimit(3)
                     Picker("Inspector", selection: $tab) { ForEach(InspectorTab.allCases, id: \.self) { Text($0.rawValue).tag($0) } }.pickerStyle(.segmented).labelsHidden()
-                }.padding(12)
+                }.padding(16).background(CraftDesign.surface)
                 Divider()
                 if let error = flow.error, !error.isEmpty {
                     HStack(alignment: .top, spacing: 8) {
@@ -343,6 +440,7 @@ private struct LensInspectorView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .background(CraftDesign.canvas)
         .sheet(item: $breakpointDraft) { draft in BreakpointEditor(store: store, draft: draft) }
     }
 
@@ -424,7 +522,12 @@ private struct LensInspectorView: View {
             }.padding().frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
-    private func detailRow(_ name: String, _ value: String) -> some View { VStack(alignment: .leading, spacing: 4) { Text(name).font(.caption.weight(.semibold)).foregroundStyle(.secondary); Text(value).font(.system(.callout, design: .monospaced)).textSelection(.enabled) } }
+    private func detailRow(_ name: String, _ value: String) -> some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(name).font(.system(size: 10, weight: .semibold)).foregroundStyle(.secondary)
+            Text(value).font(.system(.callout, design: .monospaced)).textSelection(.enabled)
+        }.frame(maxWidth: .infinity, alignment: .leading).craftCard(padding: 12)
+    }
     private func resume(_ flow: TrafficFlow, abort: Bool = false) {
         guard let pause = flow.pauseId else { store.errorMessage = "This paused flow has no current breakpoint identity."; return }
         store.resumeBreakpoint(flowID: flow.id, sessionID: flow.sessionId, pauseID: pause, stage: flow.breakpointStage, abort: abort) { error in
@@ -462,7 +565,7 @@ private struct LensMessageView: View {
                 } label: {
                     HStack { Text("Headers · \(headers.count)").font(.subheadline.weight(.semibold)); Spacer(); copyButton(headersText) }
                 }
-                Divider().padding(.vertical, 4)
+                .craftCard(padding: 12)
                 HStack {
                     Text("Body").font(.subheadline.weight(.semibold))
                     Spacer()

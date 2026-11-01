@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import SwiftUI
 
 private struct LayoutFailure: Error { let message: String }
 
@@ -37,6 +38,37 @@ private struct LayoutFailure: Error { let message: String }
             }
             guard layout.numberOfGlyphs == (text.string as NSString).length else {
                 throw LayoutFailure(message: "Layout omitted captured text")
+            }
+        }
+        // SwiftUI's hosted ruler overlays the clip view and moves its bounds
+        // origin left. A bare NSScrollView does not reproduce that geometry.
+        let host = NSHostingView(rootView: ScrollView {
+            VStack(alignment: .leading) {
+                Text("Body")
+                LensBodyTextView(text: text.string, title: "Hosted", lineNumbers: true).frame(height: 460)
+            }.padding(14)
+        })
+        for width in [494.0, 350.0, 700.0] {
+            host.frame = NSRect(x: 0, y: 0, width: width, height: 600)
+            for _ in 0..<5 {
+                host.layoutSubtreeIfNeeded()
+                RunLoop.current.run(until: Date().addingTimeInterval(0.01))
+            }
+            func findBody(_ view: NSView) -> LensBodyScrollView? {
+                if let body = view as? LensBodyScrollView { return body }
+                return view.subviews.lazy.compactMap { findBody($0) }.first
+            }
+            guard let body = findBody(host), let hostedText = body.documentView as? NSTextView,
+                  let layout = hostedText.layoutManager, let container = hostedText.textContainer else {
+                throw LayoutFailure(message: "Hosted body did not materialize")
+            }
+            layout.ensureLayout(for: container)
+            // Compare actual glyphs in clip coordinates, rather than comparing
+            // two widths that can agree while the ruler obscures their edge.
+            let used = body.contentView.convert(layout.usedRect(for: container).offsetBy(
+                dx: hostedText.textContainerOrigin.x, dy: hostedText.textContainerOrigin.y), from: hostedText)
+            guard used.maxX <= body.contentView.bounds.maxX + 0.5 else {
+                throw LayoutFailure(message: "Hosted glyph edge \(used.maxX) exceeds visible edge \(body.contentView.bounds.maxX), bounds \(body.contentView.bounds)")
             }
         }
         print("PASS: wrapped body glyphs fit the actual viewport with a ruler and after narrow/wide resize")

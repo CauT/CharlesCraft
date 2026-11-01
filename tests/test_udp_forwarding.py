@@ -259,7 +259,7 @@ class UDPForwardingAcceptance(unittest.TestCase):
                 "tcp_forwards": [{"listen_port": raw_tcp, "target_host": "127.0.0.1", "target_port": 1}],
                 "udp_forwards": [{"listen_port": value, "target_host": "127.0.0.1", "target_port": 1}
                                  for value in (first, occupied.getsockname()[1])]}
-            result = subprocess.run([sys.executable, engine_path, "--proxy-port", str(http), "--socks-port", str(socks),
+            result = subprocess.run([sys.executable, "-B", engine_path, "--proxy-port", str(http), "--socks-port", str(socks),
                 "--data-dir", str(self.directory / "failed-bind"), "--initialize-from-stdin"], input=json.dumps(config) + "\n",
                 text=True, capture_output=True, timeout=20)
             self.assertNotEqual(result.returncode, 0)

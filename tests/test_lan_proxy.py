@@ -118,7 +118,7 @@ class LANProxyAcceptance(unittest.TestCase):
             self.assertIn('id="lens-connected"', landing.text)
             self.assertIn('href="/certificate.cer"', landing.text)
             self.assertIn(self.engine.ready["ca_sha256"], landing.text)
-            self.assertIn("Connected to Lens", landing.text)
+            self.assertIn("Connected to CharlesCraft", landing.text)
             self.assertNotIn(b"PRIVATE KEY", landing.content)
             for path in ("/unknown", "/mitmproxy-ca.pem", "/../mitmproxy-ca.pem"):
                 self.assertEqual(client.get("http://lens.invalid" + path).status_code, 404)
@@ -129,7 +129,7 @@ class LANProxyAcceptance(unittest.TestCase):
             occupied.bind((LAN_ADDRESS, 0))
             occupied.listen()
             port = occupied.getsockname()[1]
-            result = subprocess.run([sys.executable, os.environ.get("LENS_TEST_ENGINE", str(ROOT / "engine/engine.py")),
+            result = subprocess.run([sys.executable, "-B", os.environ.get("LENS_TEST_ENGINE", str(ROOT / "engine/engine.py")),
                 "--data-dir", str(self.directory / "conflict"), "--proxy-port", str(port),
                 "--lan-bind", LAN_ADDRESS],
                 input="", capture_output=True, text=True, timeout=15)

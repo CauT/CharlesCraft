@@ -22,7 +22,7 @@ struct LensSessionActionView: View {
     }
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text(title).font(.title2.weight(.semibold))
+            CraftPanelHeading(title: title, subtitle: "Your workspace, retained locally.", icon: "rectangle.stack")
             switch target.kind {
             case .rename:
                 TextField("Session name", text: $name).textFieldStyle(.roundedBorder).accessibilityLabel("Session name")
@@ -38,13 +38,13 @@ struct LensSessionActionView: View {
                 pathField
                 Text("Save copy and Clear first saves every session as a workspace snapshot. Requests arriving while it saves stay in the current session. If saving fails, nothing is cleared.").font(.caption).foregroundStyle(.secondary)
             case .openWorkspace, .openWorkspaceDocument:
-                Text("Open a saved Lens workspace copy. This stops the proxy and retains the current workspace before displaying the selected copy. Use Start when ready to resume capture.")
+                Text("Open a saved CharlesCraft workspace copy. This stops the proxy and retains the current workspace before displaying the selected copy. Use Start when ready to resume capture.")
                 pathField
                 if target.kind == .openWorkspaceDocument {
                     Text("After a successful Open, Save Workspace (⌘S) updates this selected file. Open workspace copy keeps the input separate instead.").font(.caption).foregroundStyle(.secondary)
                 }
             case .saveWorkspace:
-                Text("Save every session, including HTTP, WebSocket, TCP and UDP, in one Lens workspace file. Display filters do not limit this snapshot.")
+                Text("Save every session, including HTTP, WebSocket, TCP and UDP, in one CharlesCraft workspace file. Display filters do not limit this snapshot.")
                 pathField
                 Text("Capture continues. Traffic arriving after the snapshot needs another Save. The file becomes the destination for ⌘S only after saving succeeds.").font(.caption).foregroundStyle(.secondary)
             }
@@ -81,7 +81,7 @@ struct LensSessionActionView: View {
                     }.buttonStyle(.borderedProminent).keyboardShortcut(.defaultAction).disabled(!path.hasPrefix("/") || path.contains("\0"))
                 }
             }
-        }.padding(24).frame(width: 650).disabled(store.sessionChanging || store.workspaceSaving)
+        }.padding(24).frame(width: 650).craftSheet().disabled(store.sessionChanging || store.workspaceSaving)
          .alert("Replace existing workspace file?", isPresented: $replaceExisting) {
              Button("Replace", role: .destructive, action: save)
              Button("Cancel", role: .cancel) { }

@@ -24,4 +24,4 @@ class PublicBootstrap(unittest.TestCase):
                 with self.subTest(path=path, source=type(source).__name__):
                     result = response(path, source)
                     self.assertEqual(result.status_code, 503)
-                    self.assertEqual(result.content, b"Lens public CA certificate is unavailable")
+                    self.assertEqual(result.content, b"CharlesCraft public CA certificate is unavailable")
